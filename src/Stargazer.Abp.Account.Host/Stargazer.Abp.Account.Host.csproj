@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Caching" Version="7.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Stargazer.Abp.Account.Application\Stargazer.Abp.Account.Application.csproj" />
+    <ProjectReference Include="..\Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations\Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\Stargazer.Abp.Account.HttpApi\Stargazer.Abp.Account.HttpApi.csproj" />
+  </ItemGroup>
+</Project>

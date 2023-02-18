@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
+  </ItemGroup>
+</Project>

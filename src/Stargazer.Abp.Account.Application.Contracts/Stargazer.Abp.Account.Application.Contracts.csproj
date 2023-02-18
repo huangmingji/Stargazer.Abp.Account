@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Authorization" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.FluentValidation" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stargazer.Abp.Account.Domain.Shared\Stargazer.Abp.Account.Domain.Shared.csproj" />
+    <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

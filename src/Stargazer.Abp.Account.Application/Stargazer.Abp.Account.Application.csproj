@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Caching" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.MailKit" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stargazer.Abp.Account.Application.Contracts\Stargazer.Abp.Account.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
+  </ItemGroup>
+</Project>

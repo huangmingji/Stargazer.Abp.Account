@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lemon.Common" Version="1.2.1" />
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Localization" Version="7.0.1" />
+    <PackageReference Include="Volo.Abp.Validation" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stargazer.Abp.Account.Domain.Shared\Stargazer.Abp.Account.Domain.Shared.csproj" />
+  </ItemGroup>
+</Project>
