@@ -13,7 +13,6 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
-using static Stargazer.Abp.Account.Application.Contracts.Authorization.AccountPermissions;
 
 namespace Stargazer.Abp.Account.Application.Services
 {
@@ -24,32 +23,40 @@ namespace Stargazer.Abp.Account.Application.Services
         private readonly IAccountAuthorization _accountAuthorization;
         private readonly IRoleRepository _roleRepository;
 
-        public UserService(IUserRepository userRepository, 
-            IAccountAuthorization accountAuthorization, 
-            IRoleRepository roleRepository)
+        public UserService(IUserRepository userRepository,
+            IAccountAuthorization accountAuthorization,
+            IRoleRepository roleRepository,
+            IConfiguration configuration)
         {
             _userRepository = userRepository;
             _accountAuthorization = accountAuthorization;
             _roleRepository = roleRepository;
+            _configuration = configuration;
         }
 
         public async Task<UserDto> CreateAsync(CreateUserDto input)
         {
-            var userData = new UserData(GuidGenerator.Create(),
-            input.Password,
-            input.UserName,
-                input.Email);
+            if (await _userRepository.AnyAsync(x => x.Email == input.Email))
+            {
+                throw new UserFriendlyException("邮箱已注册");
+            }
+            var userData = new UserData(GuidGenerator.Create(), input.Password, input.UserName, input.Email);
             await _userRepository.InsertAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
 
-        public async Task<UserDto> CreateAsync(CreateUserWithRoleDto input)
+        public async Task<UserDto> CreateAsync(CreateUserWithRolesDto input)
         {
-            var userData = new UserData(GuidGenerator.Create(),
-                input.Password,
-                input.UserName,
-                input.Email);
-            userData.AddRole(GuidGenerator.Create(), input.RoleId);
+            var userData = new UserData(id: GuidGenerator.Create(),
+                account: input.Account,
+                password: input.Password,
+                name: input.UserName,
+                email: input.Email,
+                phoneNumber: input.PhoneNumber);
+            input.RoleIds.ForEach(roleId =>
+            {
+                userData.AddRole(GuidGenerator.Create(), roleId);
+            });
             await _userRepository.InsertAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
@@ -117,10 +124,10 @@ namespace Stargazer.Abp.Account.Application.Services
             string account = null, string email = null, string phoneNumber = null)
         {
             var expression = Expressionable.Create<UserData>()
-                            .AndIf(!string.IsNullOrWhiteSpace(name), x=> x.NickName == name)
-                            .AndIf(!string.IsNullOrWhiteSpace(account), x=> x.Account == account)
-                            .AndIf(!string.IsNullOrWhiteSpace(email), x=> x.Email == email)
-                            .AndIf(!string.IsNullOrWhiteSpace(phoneNumber), x=> x.PhoneNumber == phoneNumber);
+                            .AndIf(!string.IsNullOrWhiteSpace(name), x => x.NickName == name)
+                            .AndIf(!string.IsNullOrWhiteSpace(account), x => x.Account == account)
+                            .AndIf(!string.IsNullOrWhiteSpace(email), x => x.Email == email)
+                            .AndIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber);
             int total = await _userRepository.CountAsync(expression);
             var data = await _userRepository.GetListByPageAsync(expression, pageIndex, pageSize);
             return new PagedResultDto<UserDto>()
@@ -138,24 +145,24 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            await _userRepository.DeleteAsync(x=> x.Id == id);
+            await _userRepository.DeleteAsync(x => x.Id == id);
         }
 
         public async Task<UserDto> FindByPhoneNumberAsync(string phoneNumber)
         {
-            var userData = await _userRepository.FindAsync(x=> x.PhoneNumber == phoneNumber);
-            return  ObjectMapper.Map<UserData, UserDto>(userData);
+            var userData = await _userRepository.FindAsync(x => x.PhoneNumber == phoneNumber);
+            return ObjectMapper.Map<UserData, UserDto>(userData);
         }
 
         public async Task<UserDto> FindByEmailAsync(string email)
         {
-            var userData = await _userRepository.FindAsync(x=> x.Email == email);
+            var userData = await _userRepository.FindAsync(x => x.Email == email);
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
 
         public async Task<UserDto> FindByAccountAsync(string account)
         {
-            var userData = await _userRepository.FindAsync(x=> x.Account == account);
+            var userData = await _userRepository.FindAsync(x => x.Account == account);
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
 
@@ -187,7 +194,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> UpdatePasswordAsync(Guid id, UpdateUserPasswordDto input)
         {
-            var userData = await _userRepository.GetAsync(x=> x.Id == id);
+            var userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.VerifyPassword(input.OldPassword);
             userData.SetPassword(input.Password);
             var result = await _userRepository.UpdateAsync(userData);
@@ -196,7 +203,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> UpdatePasswordAsync(Guid id, UpdatePasswordDto input)
         {
-            var userData = await _userRepository.GetAsync(x=> x.Id == id);
+            var userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.SetPassword(input.Password);
             var result = await _userRepository.UpdateAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(result);
@@ -204,9 +211,9 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> VerifyPasswordAsync(VerifyPasswordDto input)
         {
-            UserData userData = await _userRepository.FindAsync(x=> 
-                                            x.Account == input.Name 
-                                            || x.PhoneNumber == input.Name 
+            UserData userData = await _userRepository.FindAsync(x =>
+                                            x.Account == input.Name
+                                            || x.PhoneNumber == input.Name
                                             || x.Email == input.Name);
             if (userData == null)
             {
@@ -219,7 +226,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> VerifyPasswordAsync(Guid id, string password)
         {
-            UserData userData = await _userRepository.FindAsync(x=> x.Id == id);
+            UserData userData = await _userRepository.FindAsync(x => x.Id == id);
             if (userData == null)
             {
                 throw new EntityNotFoundException("账号不存在");
@@ -230,7 +237,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto input)
         {
-            UserData userData = await _userRepository.GetAsync(x=> x.Id == id);
+            UserData userData = await _userRepository.GetAsync(x => x.Id == id);
 
             if (await _userRepository.AnyAsync(x => x.Id != id && x.Account == input.Account))
             {
@@ -248,7 +255,7 @@ namespace Stargazer.Abp.Account.Application.Services
             if (input.RoleIds != null)
             {
                 await _accountAuthorization.CheckAccountPolicyAsync(CurrentUser.Id.GetValueOrDefault(), AccountPermissions.User.Update);
-                if (input.RoleIds is {Count: 0})
+                if (input.RoleIds is { Count: 0 })
                 {
                     throw new UserFriendlyException("请选择用户角色");
                 }
@@ -259,7 +266,7 @@ namespace Stargazer.Abp.Account.Application.Services
                 });
                 userData.SetRoles(roles);
             }
-            
+
             if (!string.IsNullOrWhiteSpace(input.Password))
             {
                 userData.SetPassword(input.Password);
@@ -272,7 +279,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> UpdateUserRoleAsync(Guid id, UpdateUserRoleDto input)
         {
-            UserData userData = await _userRepository.GetAsync(x=> x.Id == id);
+            UserData userData = await _userRepository.GetAsync(x => x.Id == id);
             Dictionary<Guid, Guid> roles = new Dictionary<Guid, Guid>();
             input.RoleIds.ForEach(item =>
             {
@@ -285,7 +292,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> VerifiedPhoneNumberAsync(Guid id, string phoneNumber)
         {
-            UserData userData = await _userRepository.GetAsync(x=> x.Id == id);
+            UserData userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.VerifiedPhoneNumber(phoneNumber);
             var result = await _userRepository.UpdateAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(result);
@@ -293,8 +300,16 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> VerifiedEmailAsync(Guid id, string email)
         {
-            UserData userData = await _userRepository.GetAsync(x=> x.Id == id);
+            UserData userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.VerifiedEmail(email);
+            var result = await _userRepository.UpdateAsync(userData);
+            return ObjectMapper.Map<UserData, UserDto>(result);
+        }
+
+        public async Task<UserDto> UpdateUserNameAsync(Guid id, UpdateUserNameDto input)
+        {
+            UserData userData = await _userRepository.GetAsync(x => x.Id == id);
+            userData.SetName(input.Name);
             var result = await _userRepository.UpdateAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(result);
         }

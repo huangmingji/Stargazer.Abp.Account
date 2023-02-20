@@ -173,6 +173,12 @@ namespace Stargazer.Abp.Account.Domain.Users
             this.PhoneNumber = phoneNumber;
         }
 
+        public void SetName(string name)
+        {
+            Check.NotNullOrEmpty(name, nameof(name));
+            NickName = name;
+        }
+
         public void SetPassword(string password)
         {
             string passwordHash = PasswordStorage.CreateHash(password, out string secretKey);

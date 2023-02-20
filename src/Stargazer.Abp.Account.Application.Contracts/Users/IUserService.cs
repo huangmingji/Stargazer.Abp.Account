@@ -11,7 +11,7 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
     {
         Task<UserDto> CreateAsync(CreateUserDto input);
         
-        Task<UserDto> CreateAsync(CreateUserWithRoleDto input);
+        Task<UserDto> CreateAsync(CreateUserWithRolesDto input);
 
         Task<UserDto> CreateAsync(UpdateUserDto input);
 
@@ -32,6 +32,8 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
         Task<UserDto> FindByEmailAsync(string email);
 
         Task<UserDto> FindByAccountAsync(string account);
+
+        Task<UserDto> UpdateUserNameAsync(Guid id, UpdateUserNameDto input);
 
         Task<UserDto> UpdatePhoneNumberAsync(Guid id, string phoneNumber);
         

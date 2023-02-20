@@ -20,20 +20,23 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers;
 public class AccountController : AbpController
 {
     private readonly IUserService _userService;
-    private readonly IDistributedCache _cache;
     private readonly IConfiguration _configuration;
     private readonly ICurrentUser _currentUser;
     public AccountController(
         IUserService userService, 
-        IDistributedCache cache, 
         IConfiguration configuration, ICurrentUser currentUser)
     {
         _userService = userService;
-        _cache = cache;
         _configuration = configuration;
         _currentUser = currentUser;
     }
         
+    [HttpPost("")]
+    public async Task<UserDto> CreateAccount(CreateUserDto input)
+    {
+        return await _userService.CreateAsync(input);
+    }
+
     [HttpGet("")]
     [Authorize]
     public async Task<UserDto> GetAsync()
@@ -41,13 +44,13 @@ public class AccountController : AbpController
         return await _userService.GetAsync(_currentUser.Id.GetValueOrDefault());
     }
     
-    [HttpPut("")]
+    [HttpPut("name")]
     [Authorize]
-    public async Task<UserDto> UpdateAsync([FromBody] UpdateUserDto input)
+    public async Task<UserDto> UpdateUserName([FromBody] UpdateUserNameDto input)
     {
-        return await _userService.UpdateUserAsync(_currentUser.Id.GetValueOrDefault(), input);
+        return await _userService.UpdateUserNameAsync(_currentUser.Id.GetValueOrDefault(), input);
     }
-    
+
     [HttpPut("password")]
     [Authorize]
     public async Task<UserDto> UpdatePassword([FromBody] UpdateUserPasswordDto input)
