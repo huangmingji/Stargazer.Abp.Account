@@ -15,7 +15,7 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ConfigureLemonAccount();
+            builder.ConfigureStargazerAbpAccount();
             base.OnModelCreating(builder);
         }
 

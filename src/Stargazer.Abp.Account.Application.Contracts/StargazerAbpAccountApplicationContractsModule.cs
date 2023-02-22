@@ -13,7 +13,7 @@ namespace Stargazer.Abp.Account.Application.Contracts
         typeof(AbpFluentValidationModule),
         typeof(AbpDddApplicationContractsModule)
     )]
-    public class LemonAccountApplicationContractsModule : AbpModule
+    public class StargazerAbpAccountApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

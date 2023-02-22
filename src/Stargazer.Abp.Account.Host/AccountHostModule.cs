@@ -19,14 +19,14 @@ using Volo.Abp.Modularity;
 namespace Stargazer.Abp.Account.Host
 {
     [DependsOn(
-    typeof(LemonAccountEntityFrameworkCoreDbMigrationsModule),
-    typeof(LemonAccountApplicationModule),
-    typeof(LemonAccountHttpApiModule),
+    typeof(StargazerAbpAccountEntityFrameworkCoreDbMigrationsModule),
+    typeof(StargazerAbpAccountApplicationModule),
+    typeof(StargazerAbpAccountHttpApiModule),
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreSerilogModule)
     )]
-    public class LemonAccountHostModule : AbpModule
+    public class StargazerAbpAccountHostModule : AbpModule
     {
         private const string DefaultCorsPolicyName = "Default";
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
@@ -80,7 +80,7 @@ namespace Stargazer.Abp.Account.Host
             // {
             //     options
             //         .ConventionalControllers
-            //         .Create(typeof(LemonAccountApplicationModule).Assembly, opts =>
+            //         .Create(typeof(StargazerAbpAccountApplicationModule).Assembly, opts =>
             //         {
             //             opts.RootPath = "account";
             //         });

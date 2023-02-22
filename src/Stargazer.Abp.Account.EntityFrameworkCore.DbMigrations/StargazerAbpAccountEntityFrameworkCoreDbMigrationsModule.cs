@@ -6,8 +6,8 @@ using Volo.Abp.Modularity;
 namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations
 {
     [DependsOn(
-        typeof(LemonAccountEntityFrameworkCoreModule))]
-    public class LemonAccountEntityFrameworkCoreDbMigrationsModule : AbpModule
+        typeof(StargazerAbpAccountEntityFrameworkCoreModule))]
+    public class StargazerAbpAccountEntityFrameworkCoreDbMigrationsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

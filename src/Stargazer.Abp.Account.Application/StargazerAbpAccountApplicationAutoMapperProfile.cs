@@ -9,9 +9,9 @@ using Volo.Abp.AutoMapper;
 
 namespace Stargazer.Abp.Account.Application
 {
-    public class LemonAccountApplicationAutoMapperProfile : Profile
+    public class StargazerAbpAccountApplicationAutoMapperProfile : Profile
     {
-        public LemonAccountApplicationAutoMapperProfile()
+        public StargazerAbpAccountApplicationAutoMapperProfile()
         {
             CreateUserDataMappings();
         }

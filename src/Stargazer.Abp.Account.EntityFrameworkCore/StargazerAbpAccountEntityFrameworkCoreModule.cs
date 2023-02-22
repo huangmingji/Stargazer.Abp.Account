@@ -9,10 +9,10 @@ using Volo.Abp.Modularity;
 namespace Stargazer.Abp.Account.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(LemonAccountDomainModule),
+        typeof(StargazerAbpAccountDomainModule),
         typeof(AbpEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCorePostgreSqlModule))]
-    public class LemonAccountEntityFrameworkCoreModule : AbpModule
+    public class StargazerAbpAccountEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

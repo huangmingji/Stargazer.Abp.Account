@@ -8,9 +8,9 @@ using Volo.Abp.Modularity;
 namespace Stargazer.Abp.Account.HttpApi.Client
 {
     [DependsOn(
-        typeof(LemonAccountApplicationContractsModule),
+        typeof(StargazerAbpAccountApplicationContractsModule),
         typeof(AbpHttpClientModule))]
-    public class LemonAccountHttpApiClientModule : AbpModule
+    public class StargazerAbpAccountHttpApiClientModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -23,7 +23,7 @@ namespace Stargazer.Abp.Account.HttpApi.Client
             // });
             // context.Services.AddSingleton<IAccountService, AccountService>();
             context.Services.AddHttpClientProxies(
-                typeof(LemonAccountApplicationContractsModule).Assembly,
+                typeof(StargazerAbpAccountApplicationContractsModule).Assembly,
                 "Account"
             );
         }

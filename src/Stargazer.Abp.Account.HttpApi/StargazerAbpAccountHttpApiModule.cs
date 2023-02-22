@@ -7,10 +7,10 @@ using Volo.Abp.Modularity;
 namespace Stargazer.Abp.Account.HttpApi
 {
     [DependsOn(
-        typeof(LemonAccountApplicationContractsModule),
+        typeof(StargazerAbpAccountApplicationContractsModule),
         typeof(AbpAspNetCoreMvcModule)
     )]
-    public class LemonAccountHttpApiModule : AbpModule
+    public class StargazerAbpAccountHttpApiModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

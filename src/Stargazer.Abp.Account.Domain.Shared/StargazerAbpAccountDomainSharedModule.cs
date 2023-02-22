@@ -6,9 +6,9 @@ namespace Stargazer.Abp.Account.Domain.Shared
 {
     [DependsOn(
         typeof(AbpValidationModule))]
-    public class LemonAccountDomainSharedModule : AbpModule
+    public class StargazerAbpAccountDomainSharedModule : AbpModule
     {
-        public LemonAccountDomainSharedModule()
+        public StargazerAbpAccountDomainSharedModule()
         {
         }
     }

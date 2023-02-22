@@ -6,9 +6,9 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Stargazer.Abp.Account.EntityFrameworkCore
 {
-    public static class LemonAccountDbContextModelCreatingExtensions
+    public static class StargazerAbpAccountDbContextModelCreatingExtensions
     {
-        public static void ConfigureLemonAccount(this ModelBuilder builder)
+        public static void ConfigureStargazerAbpAccount(this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
             builder.ConfigureAccount();

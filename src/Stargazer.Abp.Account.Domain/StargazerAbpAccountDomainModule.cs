@@ -7,9 +7,9 @@ using Volo.Abp.MultiTenancy;
 namespace Stargazer.Abp.Account.Domain
 {
     [DependsOn(
-        typeof(LemonAccountDomainSharedModule),
+        typeof(StargazerAbpAccountDomainSharedModule),
         typeof(AbpDddDomainModule))]
-    public class LemonAccountDomainModule : AbpModule
+    public class StargazerAbpAccountDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

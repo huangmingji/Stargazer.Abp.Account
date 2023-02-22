@@ -14,7 +14,7 @@ namespace Stargazer.Abp.Account.Host
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<LemonAccountHostModule>();
+            services.AddApplication<StargazerAbpAccountHostModule>();
         }
 
         public void Configure(IApplicationBuilder app)

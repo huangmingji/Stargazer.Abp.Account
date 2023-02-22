@@ -22,7 +22,7 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ConfigureLemonAccount();
+            builder.ConfigureStargazerAbpAccount();
             base.OnModelCreating(builder);
         }
 

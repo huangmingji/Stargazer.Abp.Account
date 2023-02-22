@@ -7,8 +7,8 @@ namespace Stargazer.Abp.Account.DbMigrations
 {
     [DependsOn(
         typeof(AbpAutofacModule),
-        typeof(LemonAccountEntityFrameworkCoreDbMigrationsModule),
-        typeof(LemonAccountApplicationModule)
+        typeof(StargazerAbpAccountEntityFrameworkCoreDbMigrationsModule),
+        typeof(StargazerAbpAccountApplicationModule)
     )]
     public class DbMigratorModule : AbpModule
     {
