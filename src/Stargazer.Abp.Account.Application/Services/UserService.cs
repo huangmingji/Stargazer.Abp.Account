@@ -38,9 +38,12 @@ namespace Stargazer.Abp.Account.Application.Services
         {
             if (await _userRepository.AnyAsync(x => x.Email == input.Email))
             {
-                throw new UserFriendlyException("邮箱已注册");
+                throw new UserFriendlyException("电子邮箱地址已注册");
             }
+
+            bool verifyEmail = _configuration.GetSection("App::VerifyEmail")?.ToString().ToBool() ?? false;
             var userData = new UserData(GuidGenerator.Create(), input.Password, input.UserName, input.Email);
+            userData.SetEmail(input.Email, !verifyEmail);
             await _userRepository.InsertAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
@@ -65,15 +68,15 @@ namespace Stargazer.Abp.Account.Application.Services
         {
             if (await _userRepository.AnyAsync(x => x.Account == input.Account))
             {
-                throw new UserFriendlyException("账号已存在");
+                throw new UserFriendlyException("账号已注册");
             }
             if (!string.IsNullOrWhiteSpace(input.Email) && await _userRepository.AnyAsync(x => x.Email == input.Email))
             {
-                throw new UserFriendlyException("email已存在");
+                throw new UserFriendlyException("电子邮箱地址已注册");
             }
             if (!string.IsNullOrWhiteSpace(input.PhoneNumber) && await _userRepository.AnyAsync(x => x.PhoneNumber == input.PhoneNumber))
             {
-                throw new UserFriendlyException("手机号已存在");
+                throw new UserFriendlyException("手机号已注册");
             }
             if (input.RoleIds == null || input.RoleIds.Count == 0)
             {
@@ -96,15 +99,15 @@ namespace Stargazer.Abp.Account.Application.Services
         {
             if (await _userRepository.AnyAsync(x => x.Account == input.Account))
             {
-                throw new UserFriendlyException("账号已存在");
+                throw new UserFriendlyException("账号已注册");
             }
             if (!string.IsNullOrWhiteSpace(input.Email) && await _userRepository.AnyAsync(x => x.Email == input.Email))
             {
-                throw new UserFriendlyException("email已存在");
+                throw new UserFriendlyException("电子邮箱地址已注册");
             }
             if (!string.IsNullOrWhiteSpace(input.PhoneNumber) && await _userRepository.AnyAsync(x => x.PhoneNumber == input.PhoneNumber))
             {
-                throw new UserFriendlyException("手机号已存在");
+                throw new UserFriendlyException("手机号已注册");
             }
             var role = await _roleRepository.GetAsync(x => x.IsDefault);
             var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.UserName, input.PhoneNumber,
@@ -178,6 +181,12 @@ namespace Stargazer.Abp.Account.Application.Services
         public async Task<UserDto> UpdateEmailAsync(Guid id, string email)
         {
             bool verifyEmail = _configuration.GetSection("App::VerifyEmail")?.ToString().ToBool() ?? false;
+
+            if (await _userRepository.AnyAsync(x => x.Email == email && x.Id != id))
+            {
+                throw new UserFriendlyException("电子邮箱地址已注册");
+            }
+
             var userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.SetEmail(email, !verifyEmail);
             var result = await _userRepository.UpdateAsync(userData);
