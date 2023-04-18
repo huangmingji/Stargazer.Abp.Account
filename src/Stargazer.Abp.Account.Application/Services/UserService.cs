@@ -41,7 +41,7 @@ namespace Stargazer.Abp.Account.Application.Services
                 throw new UserFriendlyException("电子邮箱地址已注册");
             }
 
-            bool verifyEmail = _configuration.GetSection("App::VerifyEmail")?.ToString().ToBool() ?? false;
+            bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
             var userData = new UserData(GuidGenerator.Create(), input.Password, input.UserName, input.Email);
             userData.SetEmail(input.Email, !verifyEmail);
             await _userRepository.InsertAsync(userData);
@@ -171,7 +171,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> UpdatePhoneNumberAsync(Guid id, string phoneNumber)
         {
-            bool verifyPhoneNumber = _configuration.GetSection("App::VerifyPhoneNumber")?.ToString().ToBool() ?? false;
+            bool verifyPhoneNumber = _configuration.GetSection("App:VerifyPhoneNumber").Value?.ToBool() ?? false;
             var userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.SetPhoneNumber(phoneNumber, !verifyPhoneNumber);
             var result = await _userRepository.UpdateAsync(userData);
@@ -180,7 +180,7 @@ namespace Stargazer.Abp.Account.Application.Services
 
         public async Task<UserDto> UpdateEmailAsync(Guid id, string email)
         {
-            bool verifyEmail = _configuration.GetSection("App::VerifyEmail")?.ToString().ToBool() ?? false;
+            bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
 
             if (await _userRepository.AnyAsync(x => x.Email == email && x.Id != id))
             {
@@ -319,6 +319,14 @@ namespace Stargazer.Abp.Account.Application.Services
         {
             UserData userData = await _userRepository.GetAsync(x => x.Id == id);
             userData.SetName(input.Name);
+            var result = await _userRepository.UpdateAsync(userData);
+            return ObjectMapper.Map<UserData, UserDto>(result);
+        }
+
+        public async Task<UserDto> UpdateAccountAsync(Guid id, UpdateAccountDto input)
+        {
+            UserData userData = await _userRepository.GetAsync(x => x.Id == id);
+            userData.SetAccount(input.Account);
             var result = await _userRepository.UpdateAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(result);
         }

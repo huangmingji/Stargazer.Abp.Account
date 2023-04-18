@@ -173,6 +173,12 @@ namespace Stargazer.Abp.Account.Domain.Users
             this.PhoneNumber = phoneNumber;
         }
 
+        public void SetAccount(string account)
+        {
+            Check.NotNullOrEmpty(account, nameof(account));
+            Account = account;
+        }
+
         public void SetName(string name)
         {
             Check.NotNullOrEmpty(name, nameof(name));
@@ -211,7 +217,7 @@ namespace Stargazer.Abp.Account.Domain.Users
         {
             if(!PasswordStorage.VerifyPassword(password, Password, SecretKey))
             {
-                throw new VerifyPasswordException(base.Id, "账号密码错误");
+                throw new VerifyPasswordException(base.Id, password);
             }
         }
 

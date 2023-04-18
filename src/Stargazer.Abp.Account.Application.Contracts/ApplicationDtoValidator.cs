@@ -33,7 +33,7 @@ namespace Stargazer.Abp.Account.Application.Contracts
             RuleFor(x=> x.Account).NotNull().NotEmpty().WithMessage("账号不能为空");
             RuleFor(x=> x.UserName).NotNull().NotEmpty().WithMessage("用户名不能为空");
             RuleFor(x=> x.Password).NotNull().NotEmpty().WithMessage("密码不能为空");
-            RuleFor(x=>x.Password).Matches(@"^(?=.*[A-Za-z~])(?=.*\d)[A-Za-z\d]{8,}$").WithMessage("请输入至少8个字符，由大小写字母、数字组合而成的密码");
+            RuleFor(x=>x.Password).Matches(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$").WithMessage("请输入至少8个字符，由大小写字母、数字组合而成的密码");
         }
     }
 
@@ -42,7 +42,7 @@ namespace Stargazer.Abp.Account.Application.Contracts
         public UpdatePasswordDtoValidator()
         {
             RuleFor(x=> x.Password).NotNull().NotEmpty().WithMessage("密码不能为空");
-            RuleFor(x=>x.Password).Matches(@"^(?=.*[A-Za-z~])(?=.*\d)[A-Za-z\d]{8,}$").WithMessage("请输入至少8个字符，由大小写字母、数字和特殊字符!@#$%^&组合而成的密码");
+            RuleFor(x=>x.Password).Matches(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$").WithMessage("请输入至少8个字符，由大小写字母、数字组合而成的密码");
         }
     }
     
@@ -50,9 +50,9 @@ namespace Stargazer.Abp.Account.Application.Contracts
     {
         public UpdateUserPasswordDtoValidator()
         {
-            RuleFor(x=> x.OldPassword).NotNull().NotEmpty().WithMessage("原密码不能为空");
+            RuleFor(x=> x.OldPassword).NotNull().NotEmpty().WithMessage("当前密码不能为空");
             RuleFor(x=> x.Password).NotNull().NotEmpty().WithMessage("密码不能为空");
-            RuleFor(x=>x.Password).Matches(@"^(?=.*[A-Za-z~])(?=.*\d)[A-Za-z\d]{8,}$").WithMessage("请输入至少8个字符，由大小写字母、数字和特殊字符!@#$%^&组合而成的密码");
+            RuleFor(x=>x.Password).Matches(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$").WithMessage("请输入至少8个字符，由大小写字母、数字组合而成的密码");
         }
     }
     
@@ -104,6 +104,14 @@ namespace Stargazer.Abp.Account.Application.Contracts
         public UpdatePhoneNumberDtoValidator()
         {
             RuleFor(x=> x.PhoneNumber).NotNull().NotEmpty().WithMessage("手机号码不能为空");
+        }
+    }
+
+    public class UpdateAccountDtoValidator: AbstractValidator<UpdateAccountDto>
+    {
+        public UpdateAccountDtoValidator()
+        {
+            RuleFor(x=> x.Account).NotNull().NotEmpty().WithMessage("账号不能为空");
         }
     }
 }

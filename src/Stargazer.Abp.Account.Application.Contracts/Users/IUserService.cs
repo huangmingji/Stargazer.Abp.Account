@@ -57,5 +57,6 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
 
         Task<UserDto> VerifiedEmailAsync(Guid id, string email);
 
+        Task<UserDto> UpdateAccountAsync(Guid id, UpdateAccountDto input);
     }
 }
