@@ -13,6 +13,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace Stargazer.Abp.Account.Application.Services
 {
@@ -22,16 +23,19 @@ namespace Stargazer.Abp.Account.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IAccountAuthorization _accountAuthorization;
         private readonly IRoleRepository _roleRepository;
+        private ILogger<UserService> _logger;
 
         public UserService(IUserRepository userRepository,
             IAccountAuthorization accountAuthorization,
             IRoleRepository roleRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILogger<UserService> logger)
         {
             _userRepository = userRepository;
             _accountAuthorization = accountAuthorization;
             _roleRepository = roleRepository;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -123,8 +127,8 @@ namespace Stargazer.Abp.Account.Application.Services
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
 
-        public async Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string name = null,
-            string account = null, string email = null, string phoneNumber = null)
+        public async Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string? name = null,
+            string? account = null, string? email = null, string? phoneNumber = null)
         {
             var expression = Expressionable.Create<UserData>()
                             .AndIf(!string.IsNullOrWhiteSpace(name), x => x.NickName == name)

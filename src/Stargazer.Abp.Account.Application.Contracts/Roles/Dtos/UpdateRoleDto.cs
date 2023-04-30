@@ -4,7 +4,7 @@ namespace Stargazer.Abp.Account.Application.Contracts.Roles.Dtos
 {
     public class UpdateRoleDto
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         
         /// <summary>
         /// 默认角色自动分配给新用户

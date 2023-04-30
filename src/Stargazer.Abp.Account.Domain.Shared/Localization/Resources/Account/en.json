@@ -1,0 +1,23 @@
+﻿{
+    "culture": "en",
+    "texts": {
+        "user": {
+            "manage": "account manage",
+            "create": "create",
+            "update": "update",
+            "delete": "delete"
+        },
+        "role": {
+            "manage": "role manage",
+            "create": "create",
+            "update": "update",
+            "delete": "delete"
+        },
+        "permission": {
+            "manage": "permission manage",
+            "create": "create",
+            "update": "update",
+            "delete": "delete"
+        }
+    }
+}

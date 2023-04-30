@@ -15,12 +15,12 @@ namespace Stargazer.Abp.Account.Application.Contracts.Permissions.Dtos
         /// <summary>
         /// 权限名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         
         /// <summary>
         /// 权限
         /// </summary>
-        public string Permission { get; set; }
+        public string Permission { get; set; } = "";
 
         public List<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
     }

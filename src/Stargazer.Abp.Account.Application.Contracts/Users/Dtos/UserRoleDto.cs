@@ -25,6 +25,6 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         /// </summary>
         public Guid RoleId { get; set; }
 
-        public RoleDto RoleData { get; set; }
+        public RoleDto RoleData { get; set; } = new RoleDto();
     }
 }

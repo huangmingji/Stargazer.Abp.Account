@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Stargazer.Abp.Account.Application.Contracts.Permissions;
+﻿using Stargazer.Abp.Account.Application.Contracts.Permissions;
 using Stargazer.Abp.Account.Application.Contracts.Permissions.Dtos;
 using Stargazer.Abp.Account.Domain.Role;
 using Lemon.Common.Extend;
@@ -66,8 +63,8 @@ namespace Stargazer.Abp.Account.Application.Services
         private async Task CheckNotNull(UpdatePermissionDto input, Guid? id = null)
         {
             var expression = Expressionable.Create<PermissionData>()
-                            .And(x=> x.Name == input.Name || x.Permission == input.Permission)
-                            .And(x=> x.ParentId == input.ParentId)
+                            .AndIf(true, x=> x.Name == input.Name || x.Permission == input.Permission)
+                            .AndIf(true, x=> x.ParentId == input.ParentId)
                             .AndIf(id!= null, x=> x.Id != id);
             if(await _permissionRepository.AnyAsync(expression))
             {

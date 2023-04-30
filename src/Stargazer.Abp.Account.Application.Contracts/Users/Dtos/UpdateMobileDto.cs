@@ -5,6 +5,6 @@ public class UpdatePhoneNumberDto
     /// <summary>
     /// 手机号码
     /// </summary>
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = "";
 
 }

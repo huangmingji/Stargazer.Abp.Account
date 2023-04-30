@@ -9,6 +9,6 @@ namespace Stargazer.Abp.Account.Application.Contracts.Roles.Dtos
         
         public Guid RoleId { get; set; }
 
-        public string Permission { get; set; }
+        public string Permission { get; set; } = "";
     }
 }
