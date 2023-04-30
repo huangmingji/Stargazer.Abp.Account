@@ -1,0 +1,21 @@
+﻿{
+    "culture": "zh_CN",
+    "account": {
+        "manage": "用户管理",
+        "create": "新增",
+        "update": "修改",
+        "delete": "删除"
+    },
+    "role": {
+        "manage": "角色管理",
+        "create": "新增",
+        "update": "修改",
+        "delete": "删除"
+    },
+    "permission": {
+        "manage": "权限管理",
+        "create": "新增",
+        "update": "修改",
+        "delete": "删除"
+    }
+}
