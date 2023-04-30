@@ -74,26 +74,26 @@ jobs:
 
 
     # push to nuget
-    - name: Push Stargazer.Abp.Account.Domain.Shared to github
+    - name: Push Stargazer.Abp.Account.Domain.Shared to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.Domain.Shared/bin/Release/Stargazer.Abp.Account.Domain.Shared.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
       
-    - name: Push Stargazer.Abp.Account.Domain to github
+    - name: Push Stargazer.Abp.Account.Domain to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.Domain/bin/Release/Stargazer.Abp.Account.Domain.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
 
-    - name: Push Stargazer.Abp.Account.EntityFrameworkCore to github
+    - name: Push Stargazer.Abp.Account.EntityFrameworkCore to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
 
-    - name: Push Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations to github
+    - name: Push Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
       
-    - name: Push Stargazer.Abp.Account.Application.Contracts to github
+    - name: Push Stargazer.Abp.Account.Application.Contracts to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.Application.Contracts/bin/Release/Stargazer.Abp.Account.Application.Contracts.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
 
-    - name: Push Stargazer.Abp.Account.Application to github
+    - name: Push Stargazer.Abp.Account.Application to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.Application/bin/Release/Stargazer.Abp.Account.Application.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
 
-    - name: Push Stargazer.Abp.Account.HttpApi to github
+    - name: Push Stargazer.Abp.Account.HttpApi to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.HttpApi/bin/Release/Stargazer.Abp.Account.HttpApi.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
 
-    - name: Push Stargazer.Abp.Account.HttpApi.Client to github
+    - name: Push Stargazer.Abp.Account.HttpApi.Client to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.HttpApi.Client/bin/Release/Stargazer.Abp.Account.HttpApi.Client.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
