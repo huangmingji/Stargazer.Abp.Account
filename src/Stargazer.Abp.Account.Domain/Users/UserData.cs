@@ -34,7 +34,7 @@ namespace Stargazer.Abp.Account.Domain.Users
         /// 手机号码
         /// </summary>
         /// <value>The phone number.</value>
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         /// <summary>
         /// 手机号码是否已验证
@@ -46,7 +46,7 @@ namespace Stargazer.Abp.Account.Domain.Users
         /// 电子邮箱
         /// </summary>
         /// <value>The email.</value>
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// 电子邮箱是否已验证
