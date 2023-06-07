@@ -48,6 +48,11 @@ namespace Stargazer.Abp.Account.Application.Services
             bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
             var userData = new UserData(GuidGenerator.Create(), input.Password, input.UserName, input.Email);
             userData.SetEmail(input.Email, !verifyEmail);
+            var role = await _roleRepository.FirstOrDefaultAsync(x => x.IsDefault);
+            if (role != null)
+            {
+                userData.AddRole(GuidGenerator.Create(), role.Id);
+            }
             await _userRepository.InsertAsync(userData);
             return ObjectMapper.Map<UserData, UserDto>(userData);
         }
