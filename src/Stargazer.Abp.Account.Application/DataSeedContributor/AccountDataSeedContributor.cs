@@ -51,10 +51,10 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
                 }
             }
 
-            var role = await _roleRepository.FindAsync(x => x.Name == "用户管理权限");
+            var role = await _roleRepository.FindAsync(x => x.Name == "账号管理");
             if (role == null)
             {
-                role = new RoleData(_guidGenerator.Create(), "用户管理权限", false, true, false);
+                role = new RoleData(_guidGenerator.Create(), "账号管理", false, true, false);
                 foreach (var item in AccountPermissions.GetAll())
                 {
                     Thread.Sleep(200);
