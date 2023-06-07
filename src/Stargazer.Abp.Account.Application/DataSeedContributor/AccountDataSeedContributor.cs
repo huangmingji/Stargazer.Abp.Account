@@ -42,7 +42,7 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
                 foreach (var permission in item.Permissions)
                 {
                     var permissionChild = permissions.FirstOrDefault(x => x.Permission == permission.Permission);
-                    if (data == null)
+                    if (permissionChild == null)
                     {
                         permissionChild = new PermissionData(_guidGenerator.Create(), permission.Name, permission.Permission, data.Id);
                         await _permissionRepository.InsertAsync(permissionChild);
