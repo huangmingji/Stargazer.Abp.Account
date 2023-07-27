@@ -52,7 +52,7 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
             StringBuilder message = new();
             message.Append($"{eventData.User.NickName}，你好。");
             message.Append("<br />");
-            message.Append($"你的账户邮箱<a href='mailto:{eventData.Email}'>{eventData.Email}</a>已发生变更");
+            message.Append($"你的账户邮箱<a href='mailto:{eventData.Email}'>{eventData.Email}</a>已发生变更。");
             message.Append("<br />");
             message.Append($"请访问<a href='{verifyUrl}'>{verifyUrl}</a>进行确认验证，此链接有效时间为20分钟，请尽快进行确认。");
             var body = await _templateRenderer.RenderAsync(
