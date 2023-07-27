@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.EventBus.Local;
@@ -53,6 +52,7 @@ public class UserService : ApplicationService, IUserService
         {
             userData.AddRole(GuidGenerator.Create(), role.Id);
         }
+
         await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
@@ -66,10 +66,7 @@ public class UserService : ApplicationService, IUserService
             phoneNumber: input.PhoneNumber);
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
-        input.RoleIds.ForEach(roleId =>
-        {
-            userData.AddRole(GuidGenerator.Create(), roleId);
-        });
+        input.RoleIds.ForEach(roleId => { userData.AddRole(GuidGenerator.Create(), roleId); });
         await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
@@ -80,27 +77,29 @@ public class UserService : ApplicationService, IUserService
         {
             throw new UserFriendlyException("账号已注册");
         }
+
         if (!string.IsNullOrWhiteSpace(input.Email) && await _userRepository.AnyAsync(x => x.Email == input.Email))
         {
             throw new UserFriendlyException("电子邮箱地址已注册");
         }
-        if (!string.IsNullOrWhiteSpace(input.PhoneNumber) && await _userRepository.AnyAsync(x => x.PhoneNumber == input.PhoneNumber))
+
+        if (!string.IsNullOrWhiteSpace(input.PhoneNumber) &&
+            await _userRepository.AnyAsync(x => x.PhoneNumber == input.PhoneNumber))
         {
             throw new UserFriendlyException("手机号已注册");
         }
+
         if (input.RoleIds == null || input.RoleIds.Count == 0)
         {
             throw new UserFriendlyException("请选择用户角色");
         }
 
-        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.Name, input.PhoneNumber);
+        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.Name,
+            input.PhoneNumber);
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
         Dictionary<Guid, Guid> roles = new Dictionary<Guid, Guid>();
-        input.RoleIds.ForEach(item =>
-        {
-            roles.Add(GuidGenerator.Create(), item);
-        });
+        input.RoleIds.ForEach(item => { roles.Add(GuidGenerator.Create(), item); });
         userData.SetRoles(roles);
         var result = await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
@@ -112,16 +111,21 @@ public class UserService : ApplicationService, IUserService
         {
             throw new UserFriendlyException("账号已注册");
         }
+
         if (!string.IsNullOrWhiteSpace(input.Email) && await _userRepository.AnyAsync(x => x.Email == input.Email))
         {
             throw new UserFriendlyException("电子邮箱地址已注册");
         }
-        if (!string.IsNullOrWhiteSpace(input.PhoneNumber) && await _userRepository.AnyAsync(x => x.PhoneNumber == input.PhoneNumber))
+
+        if (!string.IsNullOrWhiteSpace(input.PhoneNumber) &&
+            await _userRepository.AnyAsync(x => x.PhoneNumber == input.PhoneNumber))
         {
             throw new UserFriendlyException("手机号已注册");
         }
+
         var role = await _roleRepository.GetAsync(x => x.IsDefault);
-        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.UserName, input.PhoneNumber);
+        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.UserName,
+            input.PhoneNumber);
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
         userData.AddRole(GuidGenerator.Create(), role.Id);
@@ -238,13 +242,15 @@ public class UserService : ApplicationService, IUserService
             || x.Email == input.Name);
         if (userData == null)
         {
-            throw new BusinessException("账号密码错误");
+            throw new UserFriendlyException("账号密码错误");
         }
-        if(input.Name == userData.Email && !userData.EmailVerified)
+
+        if (input.Name == userData.Email && !userData.EmailVerified)
         {
             await _localEventBus.PublishAsync(new EmailChangedEvent(userData, userData.Email));
-            throw new BusinessException("电子邮箱地址未通过验证，请查看邮箱进行验证");
+            throw new UserFriendlyException("电子邮箱地址未通过验证，请查看邮箱进行验证");
         }
+
         userData.VerifyPassword(input.Password);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
@@ -254,8 +260,9 @@ public class UserService : ApplicationService, IUserService
         UserData userData = await _userRepository.FindAsync(x => x.Id == id);
         if (userData == null)
         {
-            throw new BusinessException("账号不存在");
+            throw new UserFriendlyException("账号不存在");
         }
+
         userData.VerifyPassword(password);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
@@ -266,29 +273,32 @@ public class UserService : ApplicationService, IUserService
 
         if (await _userRepository.AnyAsync(x => x.Id != id && x.Account == input.Account))
         {
-            throw new BusinessException("该账号已注册");
+            throw new UserFriendlyException("该账号已注册");
         }
-        if (!string.IsNullOrWhiteSpace(input.Email) && await _userRepository.AnyAsync(x => x.Id != id && x.Email == input.Email))
+
+        if (!string.IsNullOrWhiteSpace(input.Email) &&
+            await _userRepository.AnyAsync(x => x.Id != id && x.Email == input.Email))
         {
-            throw new BusinessException("电子邮件地址已注册");
+            throw new UserFriendlyException("电子邮件地址已注册");
         }
-        if (!string.IsNullOrWhiteSpace(input.PhoneNumber) && await _userRepository.AnyAsync(x => x.Id != id && x.PhoneNumber == input.PhoneNumber))
+
+        if (!string.IsNullOrWhiteSpace(input.PhoneNumber) &&
+            await _userRepository.AnyAsync(x => x.Id != id && x.PhoneNumber == input.PhoneNumber))
         {
-            throw new BusinessException("手机号码已注册");
+            throw new UserFriendlyException("手机号码已注册");
         }
 
         if (input.RoleIds != null)
         {
-            await _accountAuthorization.CheckAccountPolicyAsync(CurrentUser.Id.GetValueOrDefault(), AccountPermissions.User.Update);
+            await _accountAuthorization.CheckAccountPolicyAsync(CurrentUser.Id.GetValueOrDefault(),
+                AccountPermissions.User.Update);
             if (input.RoleIds is { Count: 0 })
             {
-                throw new BusinessException("请选择用户角色");
+                throw new UserFriendlyException("请选择用户角色");
             }
+
             Dictionary<Guid, Guid> roles = new Dictionary<Guid, Guid>();
-            input.RoleIds.ForEach(item =>
-            {
-                roles.Add(GuidGenerator.Create(), item);
-            });
+            input.RoleIds.ForEach(item => { roles.Add(GuidGenerator.Create(), item); });
             userData.SetRoles(roles);
         }
 
@@ -306,10 +316,7 @@ public class UserService : ApplicationService, IUserService
     {
         UserData userData = await _userRepository.GetAsync(x => x.Id == id);
         Dictionary<Guid, Guid> roles = new Dictionary<Guid, Guid>();
-        input.RoleIds.ForEach(item =>
-        {
-            roles.Add(GuidGenerator.Create(), item);
-        });
+        input.RoleIds.ForEach(item => { roles.Add(GuidGenerator.Create(), item); });
         userData.SetRoles(roles);
         var result = await _userRepository.UpdateAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);

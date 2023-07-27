@@ -48,7 +48,7 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
             });
 
-            var verifyUrl = Path.Combine(host, $"/api/account/verify-email/{eventData.User.Id}?token={token}");
+            var verifyUrl = $"{host}/api/account/verify-email/{eventData.User.Id}?token={token}";
             StringBuilder message = new();
             message.Append($"{eventData.User.NickName}，你好。");
             message.Append("<br />");
