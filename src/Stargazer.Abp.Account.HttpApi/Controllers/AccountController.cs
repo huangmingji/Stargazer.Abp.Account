@@ -55,6 +55,7 @@ public class AccountController : AbpController
         if (verifyToken == token)
         {
             await _userService.VerifiedEmailAsync(id, user.Email);
+            await _cache.RemoveAsync($"VerifyEmail:{user.Email}");
             return Redirect(returnUrl);
         }
         throw new AuthenticationException("verify email token expired");
