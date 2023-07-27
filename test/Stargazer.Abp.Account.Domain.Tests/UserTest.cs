@@ -6,17 +6,17 @@ namespace Stargazer.Abp.Account.Domain.Tests;
 
 public class UserTest
 {
-
     [Fact]
     public void Test()
     {
-
-        var user = new UserData(Guid.NewGuid(), "123456", "root", "123456@qq.com");
+        var user = new UserData(Guid.NewGuid(), "123456", "root");
+        user.SetEmail("123456@qq.com", true);
         user.NickName.ShouldBeEquivalentTo("root");
         user.Email.ShouldBeEquivalentTo("123456@qq.com");
         user.VerifyPassword("123456");
 
-        var user1 = new UserData(Guid.NewGuid(), "admin", "1234567", "admin", "1234567890", "2222@qq.com");
+        var user1 = new UserData(Guid.NewGuid(), "admin", "1234567", "admin", "1234567890");
+        user1.SetEmail("2222@qq.com", true);
         user1.NickName.ShouldBeEquivalentTo("admin");
         user1.Email.ShouldBeEquivalentTo("2222@qq.com");
         user1.PhoneNumber.ShouldBeEquivalentTo("1234567890");
@@ -62,7 +62,5 @@ public class UserTest
         user.NickName.ShouldBeEquivalentTo("tom");
         user.Email.ShouldBeEquivalentTo("2290@163.com");
         user.PhoneNumber.ShouldBeEquivalentTo("1029384756");
-
     }
-
 }

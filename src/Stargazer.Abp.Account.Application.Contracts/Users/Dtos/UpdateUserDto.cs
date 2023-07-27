@@ -15,6 +15,6 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         
         public string Password { get; set; } = "";
 
-        public List<Guid> RoleIds { get; set; } = new List<Guid>();
+        public List<Guid>? RoleIds { get; set; }
     }
 }

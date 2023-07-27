@@ -6,7 +6,6 @@ using static Lemon.Common.Cryptography;
 
 namespace Stargazer.Abp.Account.Domain.Users
 {
-
     /// <summary>
     /// 用户数据
     /// </summary>
@@ -16,108 +15,108 @@ namespace Stargazer.Abp.Account.Domain.Users
         /// 账号
         /// </summary>
         /// <value>The account.</value>
-        public string Account { get; set; } = "";
+        public string Account { get; protected set; } = "";
 
         /// <summary>
         /// 昵称
         /// </summary>
         /// <value>The name of the nike.</value>
-        public string NickName { get; set; } = "";
+        public string NickName { get; protected set; } = "";
 
         /// <summary>
         /// 头像
         /// </summary>
         /// <value>The head icon.</value>
-        public string HeadIcon { get; set; } = "";
+        public string HeadIcon { get; protected set; } = "";
 
         /// <summary>
         /// 手机号码
         /// </summary>
         /// <value>The phone number.</value>
-        public string? PhoneNumber { get; set; }
+        public string? PhoneNumber { get; protected set; }
 
         /// <summary>
         /// 手机号码是否已验证
         /// </summary>
         /// <value></value>
-        public bool PhoneNumberVerified { get; set; }
+        public bool PhoneNumberVerified { get; protected set; }
 
         /// <summary>
         /// 电子邮箱
         /// </summary>
         /// <value>The email.</value>
-        public string? Email { get; set; }
+        public string? Email { get; protected set; }
 
         /// <summary>
         /// 电子邮箱是否已验证
         /// </summary>
         /// <value></value>
-        public bool EmailVerified { get; set; }
-        
+        public bool EmailVerified { get; protected set; }
+
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password { get; set; } = "";
+        public string Password { get; protected set; } = "";
 
         /// <summary>
         /// 用户密钥
         /// </summary>
-        public string SecretKey { get; set; } = "";
+        public string SecretKey { get; protected set; } = "";
 
         /// <summary>
         /// 允许同时有多用户登录
         /// </summary>
-        public bool MultiUserLogin { get; set; }
+        public bool MultiUserLogin { get; protected set; }
 
         /// <summary>
         /// 登录次数
         /// </summary>
-        public int LogonCount { get; set; }
+        public int LogonCount { get; protected set; }
 
         /// <summary>
         /// 在线状态
         /// </summary>
-        public bool UserOnline { get; set; } = false;
+        public bool UserOnline { get; protected set; } = false;
 
         /// <summary>
         /// 允许登录时间开始
         /// </summary>
-        public DateTime AllowStartTime { get; set; } = DateTime.Now;
+        public DateTime AllowStartTime { get; protected set; } = DateTime.Now;
 
         /// <summary>
         /// 允许登录时间结束
         /// </summary>
-        public DateTime AllowEndTime { get; set; } = DateTime.Now.AddYears(100);
+        public DateTime AllowEndTime { get; protected set; } = DateTime.Now.AddYears(100);
 
         /// <summary>
         /// 暂停用户开始日期
         /// </summary>
-        public DateTime LockStartTime { get; set; } = DateTime.Now.AddYears(100);
+        public DateTime LockStartTime { get; protected set; } = DateTime.Now.AddYears(100);
 
         /// <summary>
         /// 暂停用户结束日期
         /// </summary>
-        public DateTime LockEndDate { get; set; } = DateTime.Now.AddYears(100);
+        public DateTime LockEndDate { get; protected set; } = DateTime.Now.AddYears(100);
 
         /// <summary>
         /// 第一次访问时间
         /// </summary>
-        public DateTime FirstVisitTime { get; set; } = DateTime.Now;
+        public DateTime FirstVisitTime { get; protected set; } = DateTime.Now;
 
         /// <summary>
         /// 上一次访问时间
         /// </summary>
-        public DateTime PreviousVisitTime { get; set; } = DateTime.Now;
+        public DateTime PreviousVisitTime { get; protected set; } = DateTime.Now;
 
         /// <summary>
         /// 最后访问时间
         /// </summary>
-        public DateTime LastVisitTime { get; set; } = DateTime.Now;
+        public DateTime LastVisitTime { get; protected set; } = DateTime.Now;
 
         /// <summary>
         /// 最后修改密码日期
         /// </summary>
-        public DateTime ChangPasswordDate { get; set; } = DateTime.Now;
+        public DateTime ChangPasswordDate { get; protected set; } = DateTime.Now;
 
         public List<UserRole> UserRoles = new List<UserRole>();
 
@@ -125,14 +124,12 @@ namespace Stargazer.Abp.Account.Domain.Users
         {
         }
 
-        public UserData(Guid id, string password, string name, string email)
-            : this(id, null, password, name, null, email)
+        public UserData(Guid id, string password, string name)
+            : this(id, null, password, name)
         {
-
         }
 
-        public UserData(Guid id, string account, string password, string name = "", string phoneNumber = null,
-            string email = null)
+        public UserData(Guid id, string account, string password, string name = "", string phoneNumber = null)
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
             Check.NotNullOrWhiteSpace(password, nameof(password));
@@ -141,9 +138,13 @@ namespace Stargazer.Abp.Account.Domain.Users
             NickName = name;
             Account = string.IsNullOrWhiteSpace(account) ? Guid.NewGuid().ToString("N") : account;
             PhoneNumber = phoneNumber;
-            Email = email;
             Password = PasswordStorage.CreateHash(password, out string secretKey);
             SecretKey = secretKey;
+        }
+
+        public void SetHeadIcon(string headIcon)
+        {
+            HeadIcon = headIcon;
         }
 
         public void AddRole(Guid id, Guid roleId)
@@ -197,6 +198,10 @@ namespace Stargazer.Abp.Account.Domain.Users
         {
             Email = email;
             EmailVerified = emailVerified;
+            if (!emailVerified)
+            {
+                AddLocalEvent(new EmailChangedEvent(this, email));
+            }
         }
 
         public void SetPhoneNumber(string phoneNumber, bool phoneNumberVerified)
@@ -215,7 +220,7 @@ namespace Stargazer.Abp.Account.Domain.Users
 
         public void VerifyPassword(string password)
         {
-            if(!PasswordStorage.VerifyPassword(password, Password, SecretKey))
+            if (!PasswordStorage.VerifyPassword(password, Password, SecretKey))
             {
                 throw new VerifyPasswordException(base.Id, password);
             }
@@ -237,19 +242,21 @@ namespace Stargazer.Abp.Account.Domain.Users
 
         public void VerifiedPhoneNumber(string phoneNumber)
         {
-            if(PhoneNumber != phoneNumber)
+            if (PhoneNumber != phoneNumber)
             {
                 throw new VerifiedPhoneNumberException(Id, phoneNumber);
             }
+
             this.PhoneNumberVerified = true;
         }
 
         public void VerifiedEmail(string email)
         {
-            if(Email != email)
+            if (Email != email)
             {
                 throw new VerifiedEmailException(Id, email);
             }
+
             this.EmailVerified = true;
         }
     }
