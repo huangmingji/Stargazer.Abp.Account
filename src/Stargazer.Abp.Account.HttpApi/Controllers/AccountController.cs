@@ -42,8 +42,8 @@ public class AccountController : AbpController
         return await _userService.CreateAsync(input);
     }
 
-    [HttpGet("verify-email/{id}")]
-    public async Task<ActionResult> VerifyEmailAsync([FromRoute] Guid id, [FromQuery] string token = "")
+    [HttpGet("verify-email")]
+    public async Task<ActionResult> VerifyEmailAsync([FromQuery] Guid id, [FromQuery] string token = "")
     {
         var user = await _userService.GetAsync(id);
         var verifyToken = await _cache.GetAsync($"VerifyEmail:{user.Email}");
