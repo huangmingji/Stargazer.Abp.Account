@@ -27,11 +27,11 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
 
         Task DeleteAsync(Guid id);
 
-        Task<UserDto> FindByPhoneNumberAsync(string phoneNumber);
+        Task<UserDto?> FindByPhoneNumberAsync(string phoneNumber);
 
-        Task<UserDto> FindByEmailAsync(string email);
+        Task<UserDto?> FindByEmailAsync(string email);
 
-        Task<UserDto> FindByAccountAsync(string account);
+        Task<UserDto?> FindByAccountAsync(string account);
 
         Task<UserDto> UpdateUserNameAsync(Guid id, UpdateUserNameDto input);
 
@@ -58,5 +58,9 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
         Task<UserDto> VerifiedEmailAsync(Guid id, string email);
 
         Task<UserDto> UpdateAccountAsync(Guid id, UpdateAccountDto input);
+
+        Task ResetPasswordAsync(ResetPasswordDto input);
+
+        Task FindPasswordAsync(FindPasswordDto input);
     }
 }

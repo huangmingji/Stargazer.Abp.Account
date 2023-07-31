@@ -95,4 +95,16 @@ public class AccountController : AbpController
     {
         return await _userService.UpdatePhoneNumberAsync(_currentUser.Id.GetValueOrDefault(), input.PhoneNumber);
     }
+
+    [HttpPost("find-password")]
+    public async Task FindPassword(FindPasswordDto input)
+    {
+        await _userService.FindPasswordAsync(input);
+    }
+
+    [HttpPut("reset-password")]
+    public async Task ResetPasswordAsync(ResetPasswordDto input)
+    {
+        await _userService.ResetPasswordAsync(input);
+    }
 }

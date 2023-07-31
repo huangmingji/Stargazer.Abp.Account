@@ -10,6 +10,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Microsoft.Extensions.Logging;
+using Volo.Abp.Caching;
 using Volo.Abp.EventBus.Local;
 
 namespace Stargazer.Abp.Account.Application.Services;
@@ -21,13 +22,14 @@ public class UserService : ApplicationService, IUserService
     private readonly IUserRepository _userRepository;
     private readonly IAccountAuthorization _accountAuthorization;
     private readonly IRoleRepository _roleRepository;
+    private readonly IDistributedCache<string> _cache;
     private ILogger<UserService> _logger;
 
     public UserService(IUserRepository userRepository,
         IAccountAuthorization accountAuthorization,
         IRoleRepository roleRepository,
         IConfiguration configuration,
-        ILogger<UserService> logger, ILocalEventBus localEventBus)
+        ILogger<UserService> logger, ILocalEventBus localEventBus, IDistributedCache<string> cache)
     {
         _userRepository = userRepository;
         _accountAuthorization = accountAuthorization;
@@ -35,6 +37,7 @@ public class UserService : ApplicationService, IUserService
         _configuration = configuration;
         _logger = logger;
         _localEventBus = localEventBus;
+        _cache = cache;
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -167,19 +170,19 @@ public class UserService : ApplicationService, IUserService
         await _userRepository.DeleteAsync(x => x.Id == id);
     }
 
-    public async Task<UserDto> FindByPhoneNumberAsync(string phoneNumber)
+    public async Task<UserDto?> FindByPhoneNumberAsync(string phoneNumber)
     {
         var userData = await _userRepository.FindAsync(x => x.PhoneNumber == phoneNumber);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
-    public async Task<UserDto> FindByEmailAsync(string email)
+    public async Task<UserDto?> FindByEmailAsync(string email)
     {
         var userData = await _userRepository.FindAsync(x => x.Email == email);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
-    public async Task<UserDto> FindByAccountAsync(string account)
+    public async Task<UserDto?> FindByAccountAsync(string account)
     {
         var userData = await _userRepository.FindAsync(x => x.Account == account);
         return ObjectMapper.Map<UserData, UserDto>(userData);
@@ -352,5 +355,30 @@ public class UserService : ApplicationService, IUserService
         userData.SetAccount(input.Account);
         var result = await _userRepository.UpdateAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(result);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordDto input)
+    {
+        var user = await _userRepository.FindAsync(x => x.Email == input.Email);
+        if (user == null)
+        {
+            throw new UserFriendlyException("token已过期。");
+        }
+
+        var token = await _cache.GetAsync($"FindPasswordToken:{input.Email}");
+        if (token != input.Token)
+        {
+            throw new UserFriendlyException("token已过期。");
+        }
+
+        user.SetPassword(input.Password);
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task FindPasswordAsync(FindPasswordDto input)
+    {
+        var user = await _userRepository.FindAsync(x => x.Email == input.Email);
+        if (user == null) return;
+        await _localEventBus.PublishAsync(new FindPasswordEvent(input.Email));
     }
 }
