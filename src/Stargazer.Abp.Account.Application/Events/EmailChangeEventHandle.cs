@@ -50,11 +50,14 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
 
             var verifyUrl = $"{host}/api/account/verify-email/{eventData.User.Id}?token={token}";
             StringBuilder message = new();
+            message.Append("<div style='text-align:center;font-size:24px;'>");
             message.Append($"{eventData.User.NickName}，您好。");
             message.Append("<br />");
             message.Append($"您的账户邮箱<a href='mailto:{eventData.Email}'>{eventData.Email}</a>已发生变更。");
             message.Append("<br />");
             message.Append($"请<a href='{verifyUrl}'>激活</a>邮箱，此链接有效时间为20分钟。");
+            message.Append("</div>");
+
             var body = await _templateRenderer.RenderAsync(
                 StandardEmailTemplates.Message,
                 new

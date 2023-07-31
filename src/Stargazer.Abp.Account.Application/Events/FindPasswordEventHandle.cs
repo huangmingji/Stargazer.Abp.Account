@@ -48,14 +48,15 @@ public class FindPasswordEventHandle : ILocalEventHandler<FindPasswordEvent>, IT
             string changePasswordUrl = _configuration.GetSection("App:ChangePasswordUrl").Value ?? "";
             string host = _configuration.GetSection("App:Host").Value ?? "";
             StringBuilder message = new();
-            message.Append("<div style='text-align:center'>");
+            message.Append("<div style='text-align:center;font-size:24px;'>");
             message.Append($"{user.NickName}，您好。");
             message.Append("<br />");
             message.Append($"有人（希望是您）要求在 <a href='{host}'>{host}</a> 上重置您的账号的密码。");
             message.Append("<br />");
             message.Append("如果您没有执行此请求，您可以安全地忽略此电子邮件。");
-            message.Append("<br />>");
+            message.Append("<br />");
             message.Append($"否则，点击下面的链接来完成这一进程。");
+            message.Append("<br />");
             message.Append($"<a href='{changePasswordUrl}?email={eventData.Email}&token={token}'>重置密码</a>");
             message.Append("</div>");
             var body = await _templateRenderer.RenderAsync(

@@ -370,7 +370,7 @@ public class UserService : ApplicationService, IUserService
         {
             throw new UserFriendlyException("token已过期。");
         }
-
+        await _cache.RemoveAsync($"FindPasswordToken:{input.Email}");
         user.SetPassword(input.Password);
         await _userRepository.UpdateAsync(user);
     }
