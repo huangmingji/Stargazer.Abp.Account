@@ -50,12 +50,12 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
 
             var verifyUrl = $"{host}/verify-email?email={eventData.User.Email}&token={token}";
             StringBuilder message = new();
-            message.Append("<div style='text-align:center;font-size:24px;'>");
-            message.Append($"{eventData.User.NickName}，您好。");
+            message.Append("<div style='text-align:center;'>");
+            message.Append($"<p style='font-size:20px;'>{eventData.User.NickName}，请确认您的电子邮件地址！</p>");
             message.Append("<br />");
-            message.Append($"您的账户邮箱<a href='mailto:{eventData.Email}'>{eventData.Email}</a>已发生变更。");
+            message.Append($"<p style='font-size:18px;'>单击下面的链接以验证您的电子邮件地址（<a href='mailto:{eventData.Email}'>{eventData.Email}</a>）</p>");
             message.Append("<br />");
-            message.Append($"请<a href='{verifyUrl}'>激活</a>邮箱，此链接有效时间为20分钟。");
+            message.Append($"<p style='font-size:18px;'><a href='{verifyUrl}'>确认您的邮件地址</a></p>");
             message.Append("</div>");
 
             var body = await _templateRenderer.RenderAsync(
