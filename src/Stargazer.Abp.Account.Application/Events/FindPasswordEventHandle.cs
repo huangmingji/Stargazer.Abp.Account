@@ -39,6 +39,7 @@ public class FindPasswordEventHandle : ILocalEventHandler<FindPasswordEvent>, IT
     {
         try
         {
+            _logger.LogInformation($"###FindPasswordEventHandle###-------{eventData.Email} find password start");
             var user = await _userService.FindByEmailAsync(eventData.Email);
             var token = Ext.CreateNonceStr(64);
             await _cache.SetAsync($"FindPasswordToken:{eventData.Email}", token, new DistributedCacheEntryOptions()
@@ -72,6 +73,10 @@ public class FindPasswordEventHandle : ILocalEventHandler<FindPasswordEvent>, IT
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
+        }
+        finally
+        {
+            _logger.LogInformation($"###FindPasswordEventHandle###-------{eventData.Email} find password end");
         }
     }
 }

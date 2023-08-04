@@ -35,9 +35,11 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
     {
         try
         {
+            _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} verify start");
             bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
             if (!verifyEmail)
             {
+                _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} not need verify");
                 return;
             }
 
@@ -74,6 +76,9 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
+        } finally
+        {
+            _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} verify end");
         }
     }
 }
