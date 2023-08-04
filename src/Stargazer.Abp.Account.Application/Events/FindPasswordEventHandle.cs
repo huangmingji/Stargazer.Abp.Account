@@ -49,15 +49,11 @@ public class FindPasswordEventHandle : ILocalEventHandler<FindPasswordEvent>, IT
             var changePasswordUrl = $"{host}/resetpassword?email={eventData.Email}&token={token}";
             StringBuilder message = new();
             message.Append("<div style='text-align:center;font-size:24px;'>");
-            message.Append($"{user.NickName}，您好。");
-            message.Append("<br />");
-            message.Append($"有人（希望是您）要求在 <a href='{host}'>{host}</a> 上重置您的账号的密码。");
-            message.Append("<br />");
-            message.Append("如果您没有执行此请求，您可以安全地忽略此电子邮件。");
-            message.Append("<br />");
-            message.Append($"否则，点击下面的链接来完成这一进程。");
-            message.Append("<br />");
-            message.Append($"<a href='{changePasswordUrl}?email={eventData.Email}&token={token}'>重置密码</a>");
+            message.Append($"<p style='font-size:20px;'>{user.NickName}，您好。</p>");
+            message.Append($"<p style='font-size:18px;'>有人（希望是您）要求在 <a href='{host}'>{host}</a> 上重置您的账号的密码。</p>");
+            message.Append("<p style='font-size:18px;'>如果您没有执行此请求，您可以安全地忽略此电子邮件。</p>");
+            message.Append("<p style='font-size:18px;'>否则，点击下面的链接来完成这一进程。</p>");
+            message.Append($"<p style='font-size:18px;'><a href='{changePasswordUrl}'>重置密码</a></p>");
             message.Append("</div>");
             var body = await _templateRenderer.RenderAsync(
                 StandardEmailTemplates.Message,
