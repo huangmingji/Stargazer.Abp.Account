@@ -51,9 +51,16 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
                 _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} not need verify");
                 return;
             }
+            string key = $"VerifyEmail:{eventData.Email}";
+            string? token = await _cache.GetAsync(key);
+            if(!string.IsNullOrWhiteSpace(token))
+            {
+                _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} token have sent");
+                return;
+            }
 
-            string? host = _configuration.GetSection("App:Host").Value ?? "";
-            var token = Ext.CreateNonceStr(128);
+            string host = _configuration.GetSection("App:Host").Value ?? "";
+            token = Ext.CreateNonceStr(128);
             await _cache.SetAsync($"VerifyEmail:{eventData.Email}", token, new DistributedCacheEntryOptions()
             {
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
@@ -65,7 +72,8 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
             message.Append($"<p style='font-size:20px;'>{user.NickName}，请确认您的电子邮件地址！</p>");
             message.Append($"<p style='font-size:18px;'>单击下面的链接以在<a href='{host}'>{host}</a>上验证您的电子邮件地址（<a href='mailto:{eventData.Email}'>{eventData.Email}</a>）</p>");
             message.Append($"<p style='font-size:18px;'><a href='{verifyUrl}'>确认您的邮件地址</a></p>");
-            message.Append($"<p style='font-size:18px;'>如果您没有执行此请求，您可以安全地忽略此电子邮件。</p>");
+            message.Append("<p style='font-size:18px;'>如果该验证地址已失效，请通过登录重新发送激活邮件。</p>");
+            message.Append("<p style='font-size:18px;'>如果您没有执行此请求，您可以安全地忽略此电子邮件。</p>");
             message.Append("</div>");
 
             var body = await _templateRenderer.RenderAsync(
@@ -75,7 +83,7 @@ public class EmailChangedEventHandler : ILocalEventHandler<EmailChangedEvent>, I
                     message = message.ToString()
                 }
             );
-            string subject = "Account Request";
+            string subject = "确认说明";
             await _emailSender.SendAsync(
                 to: eventData.Email, // target email address
                 subject: subject, // subject
