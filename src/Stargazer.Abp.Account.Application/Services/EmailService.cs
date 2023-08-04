@@ -19,17 +19,15 @@ public class EmailService : ITransientDependency
     private readonly IConfiguration _configuration;
     private readonly IEmailSender _emailSender;
     private readonly IDistributedCache<string> _cache;
-    private readonly IUserService _userService;
     private readonly ILogger<EmailService> _logger;
 
     public EmailService(ITemplateRenderer templateRenderer, IConfiguration configuration, IEmailSender emailSender,
-        IDistributedCache<string> cache, IUserService userService, ILogger<EmailService> logger)
+        IDistributedCache<string> cache, ILogger<EmailService> logger)
     {
         _templateRenderer = templateRenderer;
         _configuration = configuration;
         _emailSender = emailSender;
         _cache = cache;
-        _userService = userService;
         _logger = logger;
     }
 
@@ -38,13 +36,6 @@ public class EmailService : ITransientDependency
         try
         {
             _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} verify start");
-            var user = await _userService.FindByEmailAsync(eventData.Email);
-            if (user == null)
-            {
-                _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} not found");
-                return;
-            }
-
             bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
             if (!verifyEmail)
             {
@@ -70,7 +61,7 @@ public class EmailService : ITransientDependency
             var verifyUrl = $"{host}/verify-email?email={eventData.Email}&token={token}";
             StringBuilder message = new();
             message.Append("<div style='text-align:center;'>");
-            message.Append($"<p style='font-size:20px;'>{user.NickName}，请确认您的电子邮件地址！</p>");
+            message.Append($"<p style='font-size:20px;'>{eventData.User.NickName}，请确认您的电子邮件地址！</p>");
             message.Append(
                 $"<p style='font-size:18px;'>单击下面的链接以在<a href='{host}'>{host}</a>上验证您的电子邮件地址（<a href='mailto:{eventData.Email}'>{eventData.Email}</a>）</p>");
             message.Append($"<p style='font-size:18px;'><a href='{verifyUrl}'>确认您的邮件地址</a></p>");
@@ -101,18 +92,12 @@ public class EmailService : ITransientDependency
             _logger.LogInformation($"###EmailChangedEventHandler###-------{eventData.Email} verify end");
         }
     }
-    
+
     public async Task FindPassword(FindPasswordEvent eventData)
     {
         try
         {
             _logger.LogInformation($"###FindPasswordEventHandle###-------{eventData.Email} find password start");
-            var user = await _userService.FindByEmailAsync(eventData.Email);
-            if (user == null)
-            {
-                _logger.LogInformation($"###FindPasswordEventHandle###-------{eventData.Email} not found");
-                return;
-            }
             var token = Ext.CreateNonceStr(64);
             await _cache.SetAsync($"FindPasswordToken:{eventData.Email}", token, new DistributedCacheEntryOptions()
             {
@@ -122,7 +107,7 @@ public class EmailService : ITransientDependency
             var changePasswordUrl = $"{host}/resetpassword?email={eventData.Email}&token={token}";
             StringBuilder message = new();
             message.Append("<div style='text-align:center;font-size:24px;'>");
-            message.Append($"<p style='font-size:20px;'>{user.NickName}，您好。</p>");
+            message.Append($"<p style='font-size:20px;'>{eventData.User.NickName}，您好。</p>");
             message.Append($"<p style='font-size:18px;'>有人（希望是您）要求在 <a href='{host}'>{host}</a> 上重置您的账号的密码。</p>");
             message.Append("<p style='font-size:18px;'>如果您没有执行此请求，您可以安全地忽略此电子邮件。</p>");
             message.Append("<p style='font-size:18px;'>否则，点击下面的链接来完成这一进程。</p>");
@@ -134,13 +119,13 @@ public class EmailService : ITransientDependency
                 {
                     message = message.ToString()
                 }
-                );
+            );
             string subject = "重置密码说明";
             await _emailSender.SendAsync(
                 to: eventData.Email, // target email address
                 subject: subject, // subject
                 body: body // email body
-                );
+            );
         }
         catch (Exception e)
         {

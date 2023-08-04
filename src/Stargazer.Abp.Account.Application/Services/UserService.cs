@@ -250,7 +250,7 @@ public class UserService : ApplicationService, IUserService
 
         if (input.Name == userData.Email && !userData.EmailVerified)
         {
-            await _emailService.EmailChanged(new EmailChangedEvent(input.Name));
+            await _emailService.EmailChanged(new EmailChangedEvent(userData, input.Name));
             throw new UserFriendlyException("电子邮箱地址未通过验证，请查看邮箱进行验证");
         }
 
@@ -381,6 +381,6 @@ public class UserService : ApplicationService, IUserService
     {
         var user = await _userRepository.FindAsync(x => x.Email == input.Email);
         if (user == null) return;
-        await _emailService.FindPassword(new FindPasswordEvent(input.Email));
+        await _emailService.FindPassword(new FindPasswordEvent(user, input.Email));
     }
 }
