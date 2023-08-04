@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Caching;
@@ -25,15 +26,17 @@ public class AccountController : AbpController
     private readonly IConfiguration _configuration;
     private readonly ICurrentUser _currentUser;
     private readonly IDistributedCache<string> _cache;
+    private readonly ILogger<AccountController> _logger;
 
     public AccountController(
         IUserService userService,
-        IConfiguration configuration, ICurrentUser currentUser, IDistributedCache<string> cache)
+        IConfiguration configuration, ICurrentUser currentUser, IDistributedCache<string> cache, ILogger<AccountController> logger)
     {
         _userService = userService;
         _configuration = configuration;
         _currentUser = currentUser;
         _cache = cache;
+        _logger = logger;
     }
 
     [HttpPost("")]
@@ -42,23 +45,24 @@ public class AccountController : AbpController
         return await _userService.CreateAsync(input);
     }
 
-    [HttpGet("verify-email")]
-    public async Task<ActionResult> VerifyEmailAsync([FromQuery] Guid id, [FromQuery] string token = "")
+    [HttpPost("verify-email")]
+    public async Task VerifyEmailAsync(VerifyEmailDto input)
     {
-        var user = await _userService.GetAsync(id);
+        var user = await _userService.FindByEmailAsync(input.Email);
+        if (user == null)
+        {
+            _logger.LogError($"###VerifyEmailAsync###------{input.Email} not found.");
+            throw new UserFriendlyException("email未注册。");
+        }
+
         var verifyToken = await _cache.GetAsync($"VerifyEmail:{user.Email}");
-        string returnUrl = _configuration.GetSection("App:VerifyEmailReturn").Value ?? "";
-        if(string.IsNullOrWhiteSpace(returnUrl))
+        if (verifyToken != input.Token)
         {
-            throw new NotSupportedException("verify email return is null");
+            _logger.LogError($"###VerifyEmailAsync###------{input.Email} verify token error.");
+            throw new UserFriendlyException("token已失效。");
         }
-        if (verifyToken == token)
-        {
-            await _userService.VerifiedEmailAsync(id, user.Email);
-            await _cache.RemoveAsync($"VerifyEmail:{user.Email}");
-            return Redirect(returnUrl);
-        }
-        throw new AuthenticationException("verify email token expired");
+        await _userService.VerifiedEmailAsync(user.Id, user.Email);
+        await _cache.RemoveAsync($"VerifyEmail:{user.Email}");
     }
 
     [HttpGet("")]

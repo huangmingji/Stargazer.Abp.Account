@@ -45,8 +45,8 @@ public class FindPasswordEventHandle : ILocalEventHandler<FindPasswordEvent>, IT
             {
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
             });
-            string changePasswordUrl = _configuration.GetSection("App:ChangePasswordUrl").Value ?? "";
             string host = _configuration.GetSection("App:Host").Value ?? "";
+            var changePasswordUrl = $"{host}/resetpassword?email={eventData.Email}&token={token}";
             StringBuilder message = new();
             message.Append("<div style='text-align:center;font-size:24px;'>");
             message.Append($"{user.NickName}，您好。");

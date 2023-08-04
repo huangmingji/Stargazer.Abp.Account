@@ -362,12 +362,14 @@ public class UserService : ApplicationService, IUserService
         var user = await _userRepository.FindAsync(x => x.Email == input.Email);
         if (user == null)
         {
+            _logger.LogError($"###ResetPasswordAsync###------{input.Email} not found.");
             throw new UserFriendlyException("token已过期。");
         }
 
         var token = await _cache.GetAsync($"FindPasswordToken:{input.Email}");
         if (token != input.Token)
         {
+            _logger.LogError($"###ResetPasswordAsync###------{input.Email} verify token error.");
             throw new UserFriendlyException("token已过期。");
         }
         await _cache.RemoveAsync($"FindPasswordToken:{input.Email}");
