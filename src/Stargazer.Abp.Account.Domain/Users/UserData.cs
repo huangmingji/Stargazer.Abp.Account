@@ -200,7 +200,7 @@ namespace Stargazer.Abp.Account.Domain.Users
             EmailVerified = emailVerified;
             if (!emailVerified)
             {
-                AddLocalEvent(new EmailChangedEvent(this, email));
+                AddLocalEvent(new EmailChangedEvent(email));
             }
         }
 

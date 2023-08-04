@@ -250,7 +250,7 @@ public class UserService : ApplicationService, IUserService
 
         if (input.Name == userData.Email && !userData.EmailVerified)
         {
-            await _localEventBus.PublishAsync(new EmailChangedEvent(userData, userData.Email));
+            await _localEventBus.PublishAsync(new EmailChangedEvent(userData.Email));
             throw new UserFriendlyException("电子邮箱地址未通过验证，请查看邮箱进行验证");
         }
 
