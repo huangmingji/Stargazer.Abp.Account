@@ -1,5 +1,6 @@
 using Stargazer.Abp.Account.Application.Contracts;
 using Microsoft.Extensions.DependencyInjection;
+using Stargazer.Abp.Account.Application.Services;
 using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.MailKit;
@@ -25,6 +26,8 @@ namespace Stargazer.Abp.Account.Application
             {
                 options.AddProfile<StargazerAbpAccountApplicationAutoMapperProfile>(validate: true);
             });
+
+            context.Services.AddTransient<EmailService>();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Stargazer.Abp.Account.Application.Services;
 
 public class UserService : ApplicationService, IUserService
 {
-    private readonly ILocalEventBus _localEventBus;
+    private readonly EmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly IUserRepository _userRepository;
     private readonly IAccountAuthorization _accountAuthorization;
@@ -29,15 +29,15 @@ public class UserService : ApplicationService, IUserService
         IAccountAuthorization accountAuthorization,
         IRoleRepository roleRepository,
         IConfiguration configuration,
-        ILogger<UserService> logger, ILocalEventBus localEventBus, IDistributedCache<string> cache)
+        ILogger<UserService> logger, IDistributedCache<string> cache, EmailService emailService)
     {
         _userRepository = userRepository;
         _accountAuthorization = accountAuthorization;
         _roleRepository = roleRepository;
         _configuration = configuration;
         _logger = logger;
-        _localEventBus = localEventBus;
         _cache = cache;
+        _emailService = emailService;
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -250,7 +250,7 @@ public class UserService : ApplicationService, IUserService
 
         if (input.Name == userData.Email && !userData.EmailVerified)
         {
-            await _localEventBus.PublishAsync(new EmailChangedEvent(input.Name));
+            await _emailService.EmailChanged(new EmailChangedEvent(input.Name));
             throw new UserFriendlyException("电子邮箱地址未通过验证，请查看邮箱进行验证");
         }
 
@@ -381,6 +381,6 @@ public class UserService : ApplicationService, IUserService
     {
         var user = await _userRepository.FindAsync(x => x.Email == input.Email);
         if (user == null) return;
-        await _localEventBus.PublishAsync(new FindPasswordEvent(input.Email));
+        await _emailService.FindPassword(new FindPasswordEvent(input.Email));
     }
 }
