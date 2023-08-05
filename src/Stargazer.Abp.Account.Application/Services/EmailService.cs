@@ -66,7 +66,6 @@ public class EmailService : ITransientDependency
                 $"<p style='font-size:18px;'>单击下面的链接以在<a href='{host}'>{host}</a>上验证您的电子邮件地址（<a href='mailto:{eventData.Email}'>{eventData.Email}</a>）</p>");
             message.Append($"<p style='font-size:18px;'><a href='{verifyUrl}'>确认您的邮件地址</a></p>");
             message.Append("<p style='font-size:18px;'>如果该验证地址已失效，请通过登录重新发送激活邮件。</p>");
-            message.Append("<p style='font-size:18px;'>如果您没有执行此请求，您可以安全地忽略此电子邮件。</p>");
             message.Append("</div>");
 
             var body = await _templateRenderer.RenderAsync(
