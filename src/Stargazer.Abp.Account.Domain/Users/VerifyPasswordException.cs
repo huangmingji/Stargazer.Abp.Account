@@ -3,10 +3,10 @@ using Volo.Abp;
 
 namespace Stargazer.Abp.Account.Domain.Users
 {
-    public class VerifyPasswordException : BusinessException
+    public class VerifyPasswordException : UserFriendlyException
     {
         public VerifyPasswordException(Guid userId, string password)
-            : base(message: $"User ({userId}) password ({password}) error.")
+            : base(message: "账户密码错误", details: $"User ({userId}) password ({password}) error.")
         {
 
         }

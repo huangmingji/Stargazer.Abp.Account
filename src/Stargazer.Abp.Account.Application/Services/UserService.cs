@@ -245,7 +245,7 @@ public class UserService : ApplicationService, IUserService
             || x.Email == input.Name);
         if (userData == null)
         {
-            throw new UserFriendlyException("账号密码错误");
+            throw new UserFriendlyException("账户密码错误");
         }
 
         if (input.Name == userData.Email && !userData.EmailVerified)
