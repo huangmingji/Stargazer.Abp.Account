@@ -188,6 +188,7 @@ namespace Stargazer.Abp.Account.Domain.Users
 
         public void SetPassword(string password)
         {
+            Check.NotNullOrEmpty(password, nameof(password));
             string passwordHash = PasswordStorage.CreateHash(password, out string secretKey);
             Password = passwordHash;
             SecretKey = secretKey;
