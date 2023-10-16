@@ -25,7 +25,7 @@ public class RoleRepository : EfCoreRepository<AccountDbContext, RoleData, Guid>
     public async Task CheckNotNull(string name, Guid? id = null)
     {
         var queryable = await GetQueryableAsync();
-        if (queryable.Where(x => x.Name == name).WhereIf(id != null, x => x.Id == id).Any())
+        if (queryable.Where(x => x.Name == name).WhereIf(id != null, x => x.Id != id).Any())
         {
             throw new RoleNotNullException(id, name);
         }
