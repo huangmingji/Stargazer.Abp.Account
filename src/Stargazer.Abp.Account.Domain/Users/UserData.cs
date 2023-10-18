@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using static Lemon.Common.Cryptography;
@@ -138,8 +137,7 @@ namespace Stargazer.Abp.Account.Domain.Users
             NickName = name;
             Account = string.IsNullOrWhiteSpace(account) ? Guid.NewGuid().ToString("N") : account;
             PhoneNumber = phoneNumber;
-            Password = PasswordStorage.CreateHash(password, out string secretKey);
-            SecretKey = secretKey;
+            this.SetPassword(password);
         }
 
         public void SetHeadIcon(string headIcon)
@@ -189,6 +187,11 @@ namespace Stargazer.Abp.Account.Domain.Users
         public void SetPassword(string password)
         {
             Check.NotNullOrEmpty(password, nameof(password));
+            if (!Regex.IsMatch(password, @"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$"))
+            {
+                throw new VerifiedPasswordException(this.Id, password);
+            }
+
             string passwordHash = PasswordStorage.CreateHash(password, out string secretKey);
             Password = passwordHash;
             SecretKey = secretKey;

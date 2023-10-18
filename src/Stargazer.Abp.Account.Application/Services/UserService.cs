@@ -394,6 +394,11 @@ public class UserService : ApplicationService, IUserService
         userData.SetEmail(input.Email, input.EmailVerified);
         userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
 
+        if(!string.IsNullOrWhiteSpace(input.Password))
+        {
+            userData.SetPassword(input.Password);
+        }
+
         Dictionary<Guid, Guid> roleIds = new Dictionary<Guid, Guid>();
         input.RoleIds.ForEach(roleId => { roleIds.Add(GuidGenerator.Create(), roleId); });
         userData.SetRoles(roleIds);
