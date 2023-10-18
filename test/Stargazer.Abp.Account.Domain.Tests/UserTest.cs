@@ -9,14 +9,17 @@ public class UserTest
     [Fact]
     public void Test()
     {
-        var user = new UserData(Guid.NewGuid(), "dfdkUDFdfskfj34234234", "root");
+        var user = new UserData(Guid.NewGuid(), "root");
         user.SetEmail("123456@qq.com", true);
         user.NickName.ShouldBeEquivalentTo("root");
         user.Email.ShouldBeEquivalentTo("123456@qq.com");
+        user.SetPassword("dfdkUDFdfskfj34234234");
         user.VerifyPassword("dfdkUDFdfskfj34234234");
 
-        var user1 = new UserData(Guid.NewGuid(), "admin", "dfdkUDFdfskfj34234234", "admin", "1234567890");
+        var user1 = new UserData(Guid.NewGuid(), "admin", "admin", "1234567890");
+        user1.SetPassword("dfdkUDFdfskfj34234234");
         user1.SetEmail("2222@qq.com", true);
+
         user1.NickName.ShouldBeEquivalentTo("admin");
         user1.Email.ShouldBeEquivalentTo("2222@qq.com");
         user1.PhoneNumber.ShouldBeEquivalentTo("1234567890");

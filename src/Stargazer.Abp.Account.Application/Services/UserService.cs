@@ -47,9 +47,12 @@ public class UserService : ApplicationService, IUserService
             throw new UserFriendlyException("电子邮箱地址已注册");
         }
 
-        var userData = new UserData(GuidGenerator.Create(), input.Password, input.UserName);
+        var userData = new UserData(GuidGenerator.Create(), input.UserName);
+        userData.SetPassword(input.Password);
+
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
+
         var role = await _roleRepository.FirstOrDefaultAsync(x => x.IsDefault);
         if (role != null)
         {
@@ -64,9 +67,13 @@ public class UserService : ApplicationService, IUserService
     {
         var userData = new UserData(id: GuidGenerator.Create(),
             account: input.Account,
-            password: input.Password,
             name: input.UserName,
             phoneNumber: input.PhoneNumber);
+
+        if (!string.IsNullOrWhiteSpace(input.Password))
+        {
+            userData.SetPassword(input.Password);
+        }
         
         userData.SetEmail(input.Email, input.EmailVerified);
         userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
@@ -99,13 +106,16 @@ public class UserService : ApplicationService, IUserService
             throw new UserFriendlyException("请选择用户角色");
         }
 
-        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.Name,
-            input.PhoneNumber);
+        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Name, input.PhoneNumber);
+        userData.SetPassword(input.Password);
+
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
+
         Dictionary<Guid, Guid> roles = new Dictionary<Guid, Guid>();
         input.RoleIds.ForEach(item => { roles.Add(GuidGenerator.Create(), item); });
         userData.SetRoles(roles);
+
         var result = await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
@@ -129,10 +139,12 @@ public class UserService : ApplicationService, IUserService
         }
 
         var role = await _roleRepository.GetAsync(x => x.IsDefault);
-        var userData = new UserData(GuidGenerator.Create(), input.Account, input.Password, input.UserName,
-            input.PhoneNumber);
+        var userData = new UserData(GuidGenerator.Create(), input.Account, input.UserName, input.PhoneNumber);
+        userData.SetPassword(input.Password);
+
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
+
         userData.AddRole(GuidGenerator.Create(), role.Id);
         var result = await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
@@ -390,11 +402,11 @@ public class UserService : ApplicationService, IUserService
     {
         var userData = await _userRepository.GetAsync(id);
         userData.SetAccount(input.Account);
-        userData.SetName(input.UserName);        
+        userData.SetName(input.UserName);
         userData.SetEmail(input.Email, input.EmailVerified);
         userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
 
-        if(!string.IsNullOrWhiteSpace(input.Password))
+        if (!string.IsNullOrWhiteSpace(input.Password))
         {
             userData.SetPassword(input.Password);
         }

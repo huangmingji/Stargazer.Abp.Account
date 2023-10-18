@@ -123,22 +123,20 @@ namespace Stargazer.Abp.Account.Domain.Users
         {
         }
 
-        public UserData(Guid id, string password, string name)
-            : this(id, name, password, name)
+        public UserData(Guid id, string name)
+            : this(id, name, name)
         {
         }
 
-        public UserData(Guid id, string account, string password, string name, string phoneNumber = null)
+        public UserData(Guid id, string account, string name, string phoneNumber = null)
         {
             Check.NotNullOrWhiteSpace(account, nameof(account));
             Check.NotNullOrWhiteSpace(name, nameof(name));
-            Check.NotNullOrWhiteSpace(password, nameof(password));
 
             Id = id;
             NickName = name;
             Account = account;
             PhoneNumber = phoneNumber;
-            this.SetPassword(password);
         }
 
         public void SetHeadIcon(string headIcon)
