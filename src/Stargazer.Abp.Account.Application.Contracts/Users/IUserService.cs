@@ -51,6 +51,8 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
 
         Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto input);
 
+        Task<UserDto> UpdateUserAsync(Guid id, CreateUserWithRolesDto input);
+
         Task<UserDto> UpdateUserRoleAsync(Guid id, UpdateUserRoleDto input);
 
         Task<UserDto> VerifiedPhoneNumberAsync(Guid id, string phoneNumber);

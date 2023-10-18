@@ -67,8 +67,10 @@ public class UserService : ApplicationService, IUserService
             password: input.Password,
             name: input.UserName,
             phoneNumber: input.PhoneNumber);
-        bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
-        userData.SetEmail(input.Email, !verifyEmail);
+        
+        userData.SetEmail(input.Email, input.EmailVerified);
+        userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
+
         input.RoleIds.ForEach(roleId => { userData.AddRole(GuidGenerator.Create(), roleId); });
         await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
@@ -382,5 +384,21 @@ public class UserService : ApplicationService, IUserService
         var user = await _userRepository.FindAsync(x => x.Email == input.Email);
         if (user == null) return;
         await _emailService.FindPassword(new FindPasswordEvent(user, input.Email));
+    }
+
+    public async Task<UserDto> UpdateUserAsync(Guid id, CreateUserWithRolesDto input)
+    {
+        var userData = await _userRepository.GetAsync(id);
+        userData.SetAccount(input.Account);
+        userData.SetName(input.UserName);        
+        userData.SetEmail(input.Email, input.EmailVerified);
+        userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
+
+        Dictionary<Guid, Guid> roleIds = new Dictionary<Guid, Guid>();
+        input.RoleIds.ForEach(roleId => { roleIds.Add(GuidGenerator.Create(), roleId); });
+        userData.SetRoles(roleIds);
+
+        await _userRepository.UpdateAsync(userData);
+        return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 }
