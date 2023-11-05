@@ -6,28 +6,23 @@ using static Stargazer.Abp.Account.Application.Contracts.Authorization.AccountPe
 
 namespace Stargazer.Abp.Account.Application.Contracts.Authorization
 {
-	public class AccountPermissionDefinitionProvider : PermissionDefinitionProvider
+	public class AccountPermissionDefinitionProvider
     {
-        public AccountPermissionDefinitionProvider()
-		{
-		}
-
-        public override void Define(IPermissionDefinitionContext context)
+        public static void Define()
         {
-            var userGroup = context.AddGroup(User.Manage, L("用户管理"));
-            userGroup.AddPermission(User.Create, L("account:user:create"));
-            userGroup.AddPermission(User.Update, L("account:user:update"));
-            userGroup.AddPermission(User.Delete, L("account:user:delete"));
+            PermissionDefinitionProvider.AddGroup(User.Manage, L("User management"))
+                .AddPermission(User.Create, L("Create user"))
+                .AddPermission(User.Update, L("Update user"))
+                .AddPermission(User.Delete, L("Delete user"));
+            PermissionDefinitionProvider.AddGroup(Role.Manage, L("Role management"))
+                .AddPermission(Role.Create, L("Create role"))
+                .AddPermission(Role.Update, L("Update role"))
+                .AddPermission(Role.Delete, L("Delete role"));
+            PermissionDefinitionProvider.AddGroup(Permission.Manage, L("Permission management"))
+                .AddPermission(Permission.Create, L("Create permission"))
+                .AddPermission(Permission.Update, L("Update permission"))
+                .AddPermission(Permission.Delete, L("Delete permission"));
 
-            var roleGroup = context.AddGroup(Role.Manage, L("account:role:manage"));
-            roleGroup.AddPermission(Role.Create, L("account:role:create"));
-            roleGroup.AddPermission(Role.Update, L("account:role:update"));
-            roleGroup.AddPermission(Role.Delete, L("account:role:delete"));
-
-            var permissionGroup = context.AddGroup(Permission.Manage, L("account:permission:manage"));
-            permissionGroup.AddPermission(Permission.Create, L("account:permission:create"));
-            permissionGroup.AddPermission(Permission.Update, L("account:permission:update"));
-            permissionGroup.AddPermission(Permission.Delete, L("account:permission:delete"));
         }
 
         private static LocalizableString L(string name)
