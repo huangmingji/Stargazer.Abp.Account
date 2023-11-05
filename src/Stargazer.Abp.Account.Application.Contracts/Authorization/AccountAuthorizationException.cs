@@ -5,7 +5,7 @@ namespace Stargazer.Abp.Account.Application.Contracts.Authorization;
 
 public class AccountAuthorizationException : BusinessException
 {
-    public AccountAuthorizationException(Guid userId, string policyName) : base(
+    public AccountAuthorizationException(Guid? userId, string policyName) : base(
         message: $"User {userId} has no permissions {policyName}.")
     {
     }
