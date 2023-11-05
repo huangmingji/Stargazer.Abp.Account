@@ -7,18 +7,18 @@ namespace Stargazer.Abp.Account.Application.Contracts.Authorization;
 
 public class AccountAuthorization : IAccountAuthorization, ITransientDependency
 {
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
     private readonly ICurrentUser _currentUser;
 
-    public AccountAuthorization(ICurrentUser currentUser, IUserService userService)
+    public AccountAuthorization(ICurrentUser currentUser, IUserRepository userRepository)
     {
         _currentUser = currentUser;
-        _userService = userService;
+        _userRepository = userRepository;
     }
 
     public async Task CheckAccountPolicyAsync(Guid userId, string policyName)
     {
-        var user = await _userService.GetAsync(userId);
+        var user = await _userRepository.GetAsync(userId);
         if (!user.UserRoles.Exists(role => role.RoleData.Permissions.Exists(data => data.Permission == policyName)))
         {
             throw new AccountAuthorizationException(userId, policyName);
@@ -36,7 +36,7 @@ public class AccountAuthorization : IAccountAuthorization, ITransientDependency
 
     public async Task<bool> HasAccountPolicyAsync(Guid userId, string policyName)
     {
-        var user = await _userService.GetAsync(userId);
+        var user = await _userRepository.GetAsync(userId);
         return user.UserRoles.Exists(role => role.RoleData.Permissions.Exists(data => data.Permission == policyName));
     }
 
