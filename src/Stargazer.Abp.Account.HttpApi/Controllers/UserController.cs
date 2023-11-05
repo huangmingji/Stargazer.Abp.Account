@@ -39,10 +39,9 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [Authorize(AccountPermissions.User.Manage)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResultDto<UserDto>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetByPage(int pageIndex, int pageSize, string? name = null, 
-            string? account = null, string? email = null, string? mobile = null)
+        public async Task<IActionResult> GetByPage(int pageIndex, int pageSize, string? searchText = null)
         {
-            var result = await _userService.GetListAsync(pageIndex, pageSize, name, account, email, mobile);
+            var result = await _userService.GetListAsync(pageIndex, pageSize, searchText);
             return Ok(result);
         }
         

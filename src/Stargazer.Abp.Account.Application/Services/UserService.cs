@@ -156,14 +156,10 @@ public class UserService : ApplicationService, IUserService
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
-    public async Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string? name = null,
-        string? account = null, string? email = null, string? phoneNumber = null)
+    public async Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string? searchText = null)
     {
         var expression = Expressionable.Create<UserData>()
-            .AndIf(!string.IsNullOrWhiteSpace(name), x => x.NickName == name)
-            .AndIf(!string.IsNullOrWhiteSpace(account), x => x.Account == account)
-            .AndIf(!string.IsNullOrWhiteSpace(email), x => x.Email == email)
-            .AndIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber);
+            .AndIf(!string.IsNullOrWhiteSpace(searchText), x => x.NickName.Contains(searchText) || x.Account.Contains(searchText) || x.Email.Contains(searchText) || x.PhoneNumber.Contains(searchText));
         int total = await _userRepository.CountAsync(expression);
         var data = await _userRepository.GetListByPageAsync(expression, pageIndex, pageSize);
         return new PagedResultDto<UserDto>()

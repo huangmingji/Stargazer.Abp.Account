@@ -19,9 +19,7 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
         
         Task<UserDto> GetAsync(Guid id);
         
-        Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex,
-            int pageSize, string? name = null, string? account = null,
-            string? email = null, string? phoneNumber = null);
+        Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string? searchText = null);
 
         Task<List<UserDto>> GetListAsync(List<Guid> userIds);
 
