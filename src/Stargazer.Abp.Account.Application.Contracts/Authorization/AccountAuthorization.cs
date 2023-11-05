@@ -25,27 +25,18 @@ public class AccountAuthorization : IAccountAuthorization, ITransientDependency
         }
     }
 
-    public async Task CheckCurrentAccountPolicyAsync(string policyName)
+    public void CheckCurrentAccountPolicyAsync(string policyName)
     {
-        if (_currentUser.Id == null)
+        var permissions = _currentUser.GetAllClaims().Where(x=> x.Type == "permission").ToList();
+        if (permissions.Any(x => x.Value == policyName) == false)
         {
             throw new AccountAuthorizationException(_currentUser.Id, policyName);
         }
-        await CheckAccountPolicyAsync((Guid)_currentUser.Id, policyName);
     }
 
-    public async Task<bool> HasAccountPolicyAsync(Guid userId, string policyName)
+    public bool HasCurrentAccountPolicyAsync(string policyName)
     {
-        var user = await _userRepository.GetAsync(userId);
-        return user.UserRoles.Exists(role => role.RoleData.Permissions.Exists(data => data.Permission == policyName));
-    }
-
-    public async Task<bool> HasCurrentAccountPolicyAsync(string policyName)
-    {
-        if (_currentUser.Id == null)
-        {
-            return false;
-        }
-        return await HasAccountPolicyAsync((Guid)_currentUser.Id, policyName);
+        var permissions = _currentUser.GetAllClaims().Where(x=> x.Type == "permission").ToList();
+        return permissions.Any(x => x.Value == policyName);
     }
 }
