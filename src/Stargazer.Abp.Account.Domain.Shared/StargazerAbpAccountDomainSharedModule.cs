@@ -23,7 +23,7 @@ namespace Stargazer.Abp.Account.Domain.Shared
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<AccountResource>("zh_CN")
+                    .Add<AccountResource>("zh-Hans")
                     .AddVirtualJson("/Localization/Resources/Account");
             });
         }
