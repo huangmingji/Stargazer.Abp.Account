@@ -1,3 +1,4 @@
+using Org.BouncyCastle.Bcpg;
 using Stargazer.Abp.Account.Application.Contracts.Authorization;
 using Stargazer.Abp.Account.Domain.Repository;
 using Stargazer.Abp.Account.Domain.Role;
@@ -6,6 +7,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using static Stargazer.Abp.Account.Application.Contracts.Authorization.AccountPermissions;
 
 namespace Stargazer.Abp.Account.Application.DataSeedContributor;
 
@@ -13,13 +15,11 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
 {
 
     private readonly IRepository<PermissionData, Guid> _permissionRepository;
-    private readonly IRoleRepository _roleRepository;
     private readonly ICurrentTenant _currentTenant;
     private readonly IGuidGenerator _guidGenerator;
-    public AccountDataSeedContributor(IRepository<PermissionData, Guid> permissionRepository, IRoleRepository roleRepository, ICurrentTenant currentTenant, IGuidGenerator guidGenerator)
+    public AccountDataSeedContributor(IRepository<PermissionData, Guid> permissionRepository, ICurrentTenant currentTenant, IGuidGenerator guidGenerator)
     {
         _permissionRepository = permissionRepository;
-        _roleRepository = roleRepository;
         _currentTenant = currentTenant;
         _guidGenerator = guidGenerator;
     }
@@ -30,37 +30,26 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
         {
             var permissions = await _permissionRepository.GetListAsync();
 
-            foreach (var item in AccountPermissions.DefaultPermissions())
+            var AccountPermissions = PermissionDefinitionProvider.PermissionGroupDefinitions.Where(x => x.Name == User.Manage || x.Name == Role.Manage || x.Name == Permission.Manage);
+            foreach (var item in AccountPermissions)
             {
-                var data = permissions.FirstOrDefault(x => x.Permission == item.Permission);
+                var data = permissions.FirstOrDefault(x => x.Permission == item.Name);
                 if (data == null)
                 {
-                    data = new PermissionData(_guidGenerator.Create(), item.Name, item.Permission);
+                    data = new PermissionData(_guidGenerator.Create(), item.DisplayName, item.Name);
                     await _permissionRepository.InsertAsync(data);
                 }
                 Thread.Sleep(200);
-                foreach (var permission in item.Permissions)
+                foreach (var permission in item.PermissionDefinitions)
                 {
-                    var permissionChild = permissions.FirstOrDefault(x => x.Permission == permission.Permission);
+                    var permissionChild = permissions.FirstOrDefault(x => x.Permission == permission.Name);
                     if (permissionChild == null)
                     {
-                        permissionChild = new PermissionData(_guidGenerator.Create(), permission.Name, permission.Permission, data.Id);
+                        permissionChild = new PermissionData(_guidGenerator.Create(), permission.DisplayName, permission.Name, data.Id);
                         await _permissionRepository.InsertAsync(permissionChild);
                     }
                     Thread.Sleep(200);
                 }
-            }
-
-            var role = await _roleRepository.FindAsync(x => x.Name == "账号管理");
-            if (role == null)
-            {
-                role = new RoleData(_guidGenerator.Create(), "账号管理", false, true, false);
-                foreach (var item in AccountPermissions.GetAll())
-                {
-                    Thread.Sleep(200);
-                    role.Permissions.Add(new RolePermissionData(_guidGenerator.Create(), role.Id, item));
-                }
-                await _roleRepository.InsertAsync(role);
             }
         }
     }
