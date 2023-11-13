@@ -19,10 +19,20 @@
     <None Remove="Localization\" />
     <None Remove="Localization\Resources\" />
     <None Remove="Localization\Resources\Account\" />
+    <None Remove="Localization\Resources\Account\en.json" />
+    <None Remove="Localization\Resources\Account\zh-Hans.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Localization\" />
     <Folder Include="Localization\Resources\" />
     <Folder Include="Localization\Resources\Account\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Resources\Account\en.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\Resources\Account\zh-Hans.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
