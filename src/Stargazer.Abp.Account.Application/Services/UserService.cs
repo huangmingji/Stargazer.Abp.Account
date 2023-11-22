@@ -310,8 +310,7 @@ public class UserService : ApplicationService, IUserService
 
         if (input.RoleIds != null)
         {
-            await _accountAuthorization.CheckAccountPolicyAsync(CurrentUser.Id.GetValueOrDefault(),
-                AccountPermissions.User.Update);
+            _accountAuthorization.CheckCurrentAccountPolicy(AccountPermissions.User.Update);
             if (input.RoleIds is { Count: 0 })
             {
                 throw new UserFriendlyException("请选择用户角色");

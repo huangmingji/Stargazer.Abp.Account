@@ -1,10 +1,12 @@
+using Stargazer.Abp.Account.Application.Contracts.Users.Dtos;
+
 namespace Stargazer.Abp.Account.Application.Contracts.Authorization;
 
 public interface IAccountAuthorization
 {
-    Task CheckAccountPolicyAsync(Guid userId, string policyName);
+    void CheckAccountPolicy(UserDto user, string policyName);
     
-    void CheckCurrentAccountPolicyAsync(string policyName);
+    void CheckCurrentAccountPolicy(string policyName);
 
-    bool HasCurrentAccountPolicyAsync(string policyName);
+    bool HasCurrentAccountPolicy(string policyName);
 }
