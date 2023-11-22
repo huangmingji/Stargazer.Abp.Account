@@ -1,5 +1,4 @@
 using Stargazer.Abp.Account.Application.Contracts.Users;
-using Stargazer.Abp.Account.Domain.Repository;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 
@@ -7,18 +6,18 @@ namespace Stargazer.Abp.Account.Application.Contracts.Authorization;
 
 public class AccountAuthorization : IAccountAuthorization, ITransientDependency
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
     private readonly ICurrentUser _currentUser;
 
-    public AccountAuthorization(ICurrentUser currentUser, IUserRepository userRepository)
+    public AccountAuthorization(ICurrentUser currentUser, IUserService userService)
     {
         _currentUser = currentUser;
-        _userRepository = userRepository;
+        _userService = userService;
     }
 
     public async Task CheckAccountPolicyAsync(Guid userId, string policyName)
     {
-        var user = await _userRepository.GetAsync(userId);
+        var user = await _userService.GetAsync(userId);
         if (!user.UserRoles.Exists(role => role.RoleData.Permissions.Exists(data => data.Permission == policyName)))
         {
             throw new AccountAuthorizationException(userId, policyName);

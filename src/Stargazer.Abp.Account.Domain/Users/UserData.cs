@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Stargazer.Abp.Account.Domain.Shared.Users;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using static Lemon.Common.Cryptography;

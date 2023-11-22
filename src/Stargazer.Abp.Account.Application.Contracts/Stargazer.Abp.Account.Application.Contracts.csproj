@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Stargazer.Abp.Account.Domain.Shared\Stargazer.Abp.Account.Domain.Shared.csproj" />
-    <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
   </ItemGroup>
 
 </Project>

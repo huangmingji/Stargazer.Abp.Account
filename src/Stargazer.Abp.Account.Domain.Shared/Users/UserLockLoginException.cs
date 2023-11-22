@@ -1,6 +1,6 @@
 using Volo.Abp;
 
-namespace Stargazer.Abp.Account.Domain.Users;
+namespace Stargazer.Abp.Account.Domain.Shared.Users;
 
 public class UserLockLoginException: UserFriendlyException
 {

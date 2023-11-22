@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Stargazer.Abp.Account.Domain.Shared.Users;
 
 namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
 {
@@ -129,6 +127,24 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
                 }
             }
             return permissions;
+        }
+        
+        public void CheckAllowTime()
+        {
+            DateTime now = DateTime.Now;
+            if (now < AllowStartTime || now > AllowEndTime)
+            {
+                throw new UserNotAllowLoginException(Id);
+            }
+        }
+
+        public void CheckLockTime()
+        {
+            DateTime now = DateTime.Now;
+            if (now > LockStartTime && now < LockEndDate)
+            {
+                throw new UserLockLoginException(Id);
+            }
         }
     }
 }
