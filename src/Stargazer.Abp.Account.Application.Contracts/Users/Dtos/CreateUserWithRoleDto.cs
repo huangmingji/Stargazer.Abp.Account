@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
 {
-    public class CreateUserWithRolesDto : CreateUserDto
+    public class CreateOrUpdateUserWithRolesDto : CreateUserDto
     {
         public string Account { get; set; } = "";
 
@@ -20,6 +20,27 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         /// </summary>
         /// <value></value>
         public bool PhoneNumberVerified { get; set; }
+        
+        /// <summary>
+        /// 允许登录时间开始
+        /// </summary>
+        public DateTime AllowStartTime { get; protected set; } = DateTime.Now;
+
+        /// <summary>
+        /// 允许登录时间结束
+        /// </summary>
+        public DateTime AllowEndTime { get; protected set; } = DateTime.Now.AddYears(100);
+        
+
+        /// <summary>
+        /// 暂停用户开始日期
+        /// </summary>
+        public DateTime LockStartTime { get; protected set; } = DateTime.Now.AddYears(100);
+
+        /// <summary>
+        /// 暂停用户结束日期
+        /// </summary>
+        public DateTime LockEndDate { get; protected set; } = DateTime.Now.AddYears(100);
 
         public List<Guid> RoleIds { get; set; } = new List<Guid>();
     }

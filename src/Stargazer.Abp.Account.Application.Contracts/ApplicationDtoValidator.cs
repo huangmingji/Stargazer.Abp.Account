@@ -26,9 +26,9 @@ namespace Stargazer.Abp.Account.Application.Contracts
         }
     }
     
-    public class CreateUserWithRolesDtoValidator : AbstractValidator<CreateUserWithRolesDto>
+    public class CreateOrUpdateUserWithRolesDtoValidator : AbstractValidator<CreateOrUpdateUserWithRolesDto>
     {
-        public CreateUserWithRolesDtoValidator()
+        public CreateOrUpdateUserWithRolesDtoValidator()
         {            
             RuleFor(x=> x.Account).NotNull().NotEmpty().WithMessage("账号不能为空");
             RuleFor(x=> x.UserName).NotNull().NotEmpty().WithMessage("用户名不能为空");

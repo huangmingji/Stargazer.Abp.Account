@@ -119,6 +119,8 @@ namespace Stargazer.Abp.Account.Domain.Users
 
         public List<UserRole> UserRoles = new List<UserRole>();
 
+        public bool IsDeleted { get; set; }
+        
         public UserData()
         {
         }
@@ -241,7 +243,23 @@ namespace Stargazer.Abp.Account.Domain.Users
             AllowEndTime = endTime;
         }
 
-        public bool IsDeleted { get; set; }
+        public void CheckAllowTime()
+        {
+            DateTime now = DateTime.Now;
+            if (now < AllowStartTime || now > AllowEndTime)
+            {
+                throw new UserNotAllowLoginException(Id);
+            }
+        }
+
+        public void CheckLockTime()
+        {
+            DateTime now = DateTime.Now;
+            if (now > LockStartTime && now < LockEndDate)
+            {
+                throw new UserLockLoginException(Id);
+            }
+        }
 
         public void VerifiedPhoneNumber(string phoneNumber)
         {

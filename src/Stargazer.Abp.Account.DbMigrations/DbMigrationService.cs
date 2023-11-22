@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Stargazer.Abp.Account.Application.Contracts.Authorization;
-using Stargazer.Abp.Account.Application.Contracts.Permissions;
 using Stargazer.Abp.Account.Application.Contracts.Roles;
 using Stargazer.Abp.Account.Application.Contracts.Roles.Dtos;
 using Stargazer.Abp.Account.Application.Contracts.Users;
@@ -45,7 +44,7 @@ namespace Stargazer.Abp.Account.DbMigrations
                 var user = await _userService.FindByEmailAsync("admin@yunpan.com");
                 if (user == null)
                 {
-                    var userInput = new CreateUserWithRolesDto()
+                    var userInput = new CreateOrUpdateUserWithRolesDto()
                     {
                         UserName = "admin",
                         Password = "Password123456",

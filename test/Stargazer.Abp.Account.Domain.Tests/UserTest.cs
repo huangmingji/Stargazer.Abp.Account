@@ -15,6 +15,10 @@ public class UserTest
         user.Email.ShouldBeEquivalentTo("123456@qq.com");
         user.SetPassword("dfdkUDFdfskfj34234234");
         user.VerifyPassword("dfdkUDFdfskfj34234234");
+        user.AllowUser(DateTime.Now, DateTime.Now.AddMinutes(2));
+        user.CheckAllowTime();
+        user.LockUser(DateTime.Now.AddMinutes(1), DateTime.Now.AddMinutes(2));
+        user.CheckLockTime();
 
         var user1 = new UserData(Guid.NewGuid(), "admin", "admin", "1234567890");
         user1.SetPassword("dfdkUDFdfskfj34234234");

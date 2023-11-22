@@ -63,7 +63,7 @@ public class UserService : ApplicationService, IUserService
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
-    public async Task<UserDto> CreateAsync(CreateUserWithRolesDto input)
+    public async Task<UserDto> CreateAsync(CreateOrUpdateUserWithRolesDto input)
     {
         var userData = new UserData(id: GuidGenerator.Create(),
             account: input.Account,
@@ -77,6 +77,9 @@ public class UserService : ApplicationService, IUserService
         
         userData.SetEmail(input.Email, input.EmailVerified);
         userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
+        
+        userData.AllowUser(input.AllowStartTime, input.AllowEndTime);
+        userData.LockUser(input.LockStartTime, input.LockEndDate);
 
         input.RoleIds.ForEach(roleId => { userData.AddRole(GuidGenerator.Create(), roleId); });
         await _userRepository.InsertAsync(userData);
@@ -265,6 +268,8 @@ public class UserService : ApplicationService, IUserService
         }
 
         userData.VerifyPassword(input.Password);
+        userData.CheckAllowTime();
+        userData.CheckLockTime();
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
@@ -277,6 +282,8 @@ public class UserService : ApplicationService, IUserService
         }
 
         userData.VerifyPassword(password);
+        userData.CheckAllowTime();
+        userData.CheckLockTime();
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
@@ -394,14 +401,15 @@ public class UserService : ApplicationService, IUserService
         await _emailService.FindPassword(new FindPasswordEvent(user, input.Email));
     }
 
-    public async Task<UserDto> UpdateUserAsync(Guid id, CreateUserWithRolesDto input)
+    public async Task<UserDto> UpdateUserAsync(Guid id, CreateOrUpdateUserWithRolesDto input)
     {
         var userData = await _userRepository.GetAsync(id);
         userData.SetAccount(input.Account);
         userData.SetName(input.UserName);
         userData.SetEmail(input.Email, input.EmailVerified);
         userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
-
+        userData.AllowUser(input.AllowStartTime, input.AllowEndTime);
+        userData.LockUser(input.LockStartTime, input.LockEndDate);
         if (!string.IsNullOrWhiteSpace(input.Password))
         {
             userData.SetPassword(input.Password);
