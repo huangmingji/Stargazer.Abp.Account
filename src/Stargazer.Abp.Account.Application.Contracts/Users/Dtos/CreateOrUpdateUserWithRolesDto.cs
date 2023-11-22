@@ -24,23 +24,23 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         /// <summary>
         /// 允许登录时间开始
         /// </summary>
-        public DateTime AllowStartTime { get; protected set; } = DateTime.Now;
+        public DateTime AllowStartTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 允许登录时间结束
         /// </summary>
-        public DateTime AllowEndTime { get; protected set; } = DateTime.Now.AddYears(100);
+        public DateTime AllowEndTime { get; set; } = DateTime.Now.AddYears(100);
         
 
         /// <summary>
         /// 暂停用户开始日期
         /// </summary>
-        public DateTime LockStartTime { get; protected set; } = DateTime.Now.AddYears(100);
+        public DateTime LockStartTime { get; set; } = DateTime.Now.AddYears(100);
 
         /// <summary>
         /// 暂停用户结束日期
         /// </summary>
-        public DateTime LockEndDate { get; protected set; } = DateTime.Now.AddYears(100);
+        public DateTime LockEndDate { get; set; } = DateTime.Now.AddYears(100);
 
         public List<Guid> RoleIds { get; set; } = new List<Guid>();
     }
