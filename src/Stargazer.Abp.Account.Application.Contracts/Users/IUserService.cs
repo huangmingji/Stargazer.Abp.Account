@@ -18,12 +18,18 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
         Task<UserDto> CreateAsync(CreateUserDefaultRoleDto input);
         
         Task<UserDto> GetAsync(Guid id);
+
+        Task<UserDto> GetIncludingDeletedAsync(Guid id);
         
         Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string? searchText = null);
+
+        Task<PagedResultDto<UserDto>> GetListIncludingDeletedAsync(int pageIndex, int pageSize, string? searchText = null);
 
         Task<List<UserDto>> GetListAsync(List<Guid> userIds);
 
         Task DeleteAsync(Guid id);
+
+        Task DeleteIncludingDeletedAsync(Guid id);
 
         Task<UserDto?> FindByPhoneNumberAsync(string phoneNumber);
 
@@ -50,6 +56,8 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
         Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto input);
 
         Task<UserDto> UpdateUserAsync(Guid id, CreateOrUpdateUserWithRolesDto input);
+        
+        Task<UserDto> UpdateUserIncludingDeletedAsync(Guid id, CreateOrUpdateUserWithRolesDto input);
 
         Task<UserDto> UpdateUserRoleAsync(Guid id, UpdateUserRoleDto input);
 

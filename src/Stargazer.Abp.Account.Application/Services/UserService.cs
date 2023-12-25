@@ -11,12 +11,13 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
-using Volo.Abp.EventBus.Local;
+using Volo.Abp.Data;
 
 namespace Stargazer.Abp.Account.Application.Services;
 
 public class UserService : ApplicationService, IUserService
 {
+    private readonly IDataFilter _dataFilter;
     private readonly EmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly IUserRepository _userRepository;
@@ -29,7 +30,7 @@ public class UserService : ApplicationService, IUserService
         IAccountAuthorization accountAuthorization,
         IRoleRepository roleRepository,
         IConfiguration configuration,
-        ILogger<UserService> logger, IDistributedCache<string> cache, EmailService emailService)
+        ILogger<UserService> logger, IDistributedCache<string> cache, EmailService emailService, IDataFilter dataFilter)
     {
         _userRepository = userRepository;
         _accountAuthorization = accountAuthorization;
@@ -38,6 +39,7 @@ public class UserService : ApplicationService, IUserService
         _logger = logger;
         _cache = cache;
         _emailService = emailService;
+        _dataFilter = dataFilter;
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -74,10 +76,10 @@ public class UserService : ApplicationService, IUserService
         {
             userData.SetPassword(input.Password);
         }
-        
+
         userData.SetEmail(input.Email, input.EmailVerified);
         userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
-        
+
         userData.AllowUser(input.AllowStartTime, input.AllowEndTime);
         userData.LockUser(input.LockStartTime, input.LockEndDate);
 
@@ -185,19 +187,22 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto?> FindByPhoneNumberAsync(string phoneNumber)
     {
-        var userData = await _userRepository.FindAsync(x => x.PhoneNumber == phoneNumber);
+        var userData = await _userRepository.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (userData == null) return null;
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
     public async Task<UserDto?> FindByEmailAsync(string email)
     {
-        var userData = await _userRepository.FindAsync(x => x.Email == email);
+        var userData = await _userRepository.FirstOrDefaultAsync(x => x.Email == email);
+        if (userData == null) return null;
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
     public async Task<UserDto?> FindByAccountAsync(string account)
     {
-        var userData = await _userRepository.FindAsync(x => x.Account == account);
+        var userData = await _userRepository.FirstOrDefaultAsync(x => x.Account == account);
+        if (userData == null) return null;
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
@@ -252,7 +257,7 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto> VerifyPasswordAsync(VerifyPasswordDto input)
     {
-        UserData userData = await _userRepository.FindAsync(x =>
+        UserData? userData = await _userRepository.FirstOrDefaultAsync(x =>
             x.Account == input.Name
             || x.PhoneNumber == input.Name
             || x.Email == input.Name);
@@ -275,7 +280,7 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto> VerifyPasswordAsync(Guid id, string password)
     {
-        UserData userData = await _userRepository.FindAsync(x => x.Id == id);
+        UserData? userData = await _userRepository.FirstOrDefaultAsync(x => x.Id == id);
         if (userData == null)
         {
             throw new UserFriendlyException("账号不存在");
@@ -420,5 +425,37 @@ public class UserService : ApplicationService, IUserService
 
         await _userRepository.UpdateAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
+    }
+
+    public async Task<UserDto> GetIncludingDeletedAsync(Guid id)
+    {
+        using (_dataFilter.Disable<ISoftDelete>())
+        {
+            return await GetAsync(id);
+        }
+    }
+
+    public async Task<PagedResultDto<UserDto>> GetListIncludingDeletedAsync(int pageIndex, int pageSize, string? searchText = null)
+    {
+        using (_dataFilter.Disable<ISoftDelete>())
+        {
+            return await GetListAsync(pageIndex, pageSize, searchText);
+        }
+    }
+
+    public async Task DeleteIncludingDeletedAsync(Guid id)
+    {
+        using (_dataFilter.Disable<ISoftDelete>())
+        {
+            await DeleteAsync(id);
+        }
+    }
+
+    public Task<UserDto> UpdateUserIncludingDeletedAsync(Guid id, CreateOrUpdateUserWithRolesDto input)
+    {
+        using (_dataFilter.Disable<ISoftDelete>())
+        {
+            return UpdateUserAsync(id, input);
+        }
     }
 }
