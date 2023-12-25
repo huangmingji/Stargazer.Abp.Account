@@ -60,16 +60,14 @@ public class EmailService : ITransientDependency
 
             var verifyUrl = $"{host}/verify-email?email={eventData.Email}&token={token}";
             StringBuilder message = new();
-            message.Append("<div style='text-align:center;'>");
-            message.Append($"<p style='font-size:20px;'>{eventData.User.NickName}，请确认您的电子邮件地址！</p>");
-            message.Append(
-                $"<p style='font-size:18px;'>单击下面的链接以在<a href='{host}'>{host}</a>上验证您的电子邮件地址（<a href='mailto:{eventData.Email}'>{eventData.Email}</a>）</p>");
-            message.Append($"<p style='font-size:18px;'><a href='{verifyUrl}'>确认您的邮件地址</a></p>");
-            message.Append("<p style='font-size:18px;'>如果该验证地址已失效，请通过登录重新发送激活邮件。</p>");
-            message.Append("</div>");
+            message.Append($"<p>你好，{eventData.User.NickName}！</p>");
+            message.Append("<p>请确认您的电子邮件地址！</p>");
+            message.Append($"<p>单击下面的链接以在<a href='{host}'>{host}</a>上验证激活您的电子邮件地址（<a href='mailto:{eventData.Email}'>{eventData.Email}</a>）</p>");
+            message.Append($"<p><a href='{verifyUrl}'>确认激活您的邮件地址</a></p>");
+            message.Append("<p>以上链接有效时间为20分钟，请在有效期内完成验证</p>");
+            message.Append("<p>如果该验证地址已失效，请通过登录重新发送激活邮件。</p>");
 
-            var body = await _templateRenderer.RenderAsync(
-                StandardEmailTemplates.Message,
+            var body = await _templateRenderer.RenderAsync(StandardEmailTemplates.Message,
                 new
                 {
                     message = message.ToString()
@@ -105,12 +103,12 @@ public class EmailService : ITransientDependency
             string host = _configuration.GetSection("App:Host").Value ?? "";
             var changePasswordUrl = $"{host}/resetpassword?email={eventData.Email}&token={token}";
             StringBuilder message = new();
-            message.Append("<div style='text-align:center;font-size:24px;'>");
-            message.Append($"<p style='font-size:20px;'>{eventData.User.NickName}，您好。</p>");
-            message.Append($"<p style='font-size:18px;'>有人（希望是您）要求在 <a href='{host}'>{host}</a> 上重置您的账号的密码。</p>");
-            message.Append("<p style='font-size:18px;'>如果您没有执行此请求，您可以安全地忽略此电子邮件。</p>");
-            message.Append("<p style='font-size:18px;'>否则，点击下面的链接来完成这一进程。</p>");
-            message.Append($"<p style='font-size:18px;'><a href='{changePasswordUrl}'>重置密码</a></p>");
+            message.Append("<div>");
+            message.Append($"<p>{eventData.User.NickName}，您好!</p>");
+            message.Append($"<p>有人（希望是您）要求在 <a href='{host}'>{host}</a> 上重置您的账号的密码</p>");
+            message.Append("<p>如果您没有执行此请求，您可以安全地忽略此电子邮件</p>");
+            message.Append("<p>否则，点击下面的链接来完成这一进程</p>");
+            message.Append($"<p><a href='{changePasswordUrl}'>重置密码</a></p>");
             message.Append("</div>");
             var body = await _templateRenderer.RenderAsync(
                 StandardEmailTemplates.Message,
