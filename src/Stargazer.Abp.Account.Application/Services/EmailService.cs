@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using Lemon.Common.Extend;
 using Microsoft.Extensions.Caching.Distributed;
@@ -58,7 +59,7 @@ public class EmailService : ITransientDependency
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
             });
 
-            var verifyUrl = $"{host}/verify-email?email={eventData.Email}&token={token}";
+            var verifyUrl = $"{host}/verify-email?email={WebUtility.UrlEncode(eventData.Email)}&token={WebUtility.UrlEncode(token)}";
             StringBuilder message = new();
             message.Append($"<p>你好，{eventData.User.NickName}！</p>");
             message.Append("<p>请确认您的电子邮件地址！</p>");
@@ -101,7 +102,7 @@ public class EmailService : ITransientDependency
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(20)
             });
             string host = _configuration.GetSection("App:Host").Value ?? "";
-            var changePasswordUrl = $"{host}/resetpassword?email={eventData.Email}&token={token}";
+            var changePasswordUrl = $"{host}/resetpassword?email={WebUtility.UrlEncode(eventData.Email)}&token={WebUtility.UrlEncode(token)}";
             StringBuilder message = new();
             message.Append("<div>");
             message.Append($"<p>{eventData.User.NickName}，您好!</p>");
