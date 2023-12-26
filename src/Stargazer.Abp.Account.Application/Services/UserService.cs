@@ -50,16 +50,8 @@ public class UserService : ApplicationService, IUserService
 
         var userData = new UserData(GuidGenerator.Create(), input.UserName);
         userData.SetPassword(input.Password);
-
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
-
-        var role = await _roleRepository.FindAsync(x => x.IsDefault);
-        if (role != null)
-        {
-            userData.AddRole(GuidGenerator.Create(), role.Id);
-        }
-
         await _userRepository.InsertAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
