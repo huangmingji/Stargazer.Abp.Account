@@ -12,12 +12,12 @@ using Volo.Abp.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using System.Linq.Dynamic.Core;
 
 namespace Stargazer.Abp.Account.Application.Services;
 
 public class UserService : ApplicationService, IUserService
 {
-    private readonly IDataFilter _dataFilter;
     private readonly EmailService _emailService;
     private readonly IConfiguration _configuration;
     private readonly IUserRepository _userRepository;
@@ -30,7 +30,7 @@ public class UserService : ApplicationService, IUserService
         IAccountAuthorization accountAuthorization,
         IRoleRepository roleRepository,
         IConfiguration configuration,
-        ILogger<UserService> logger, IDistributedCache<string> cache, EmailService emailService, IDataFilter dataFilter)
+        ILogger<UserService> logger, IDistributedCache<string> cache, EmailService emailService)
     {
         _userRepository = userRepository;
         _accountAuthorization = accountAuthorization;
@@ -39,7 +39,6 @@ public class UserService : ApplicationService, IUserService
         _logger = logger;
         _cache = cache;
         _emailService = emailService;
-        _dataFilter = dataFilter;
     }
 
     public async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -429,33 +428,48 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto> GetIncludingDeletedAsync(Guid id)
     {
-        using (_dataFilter.Disable<ISoftDelete>())
-        {
-            return await GetAsync(id);
-        }
+        var userData = await _userRepository.GetAsync(x=> x.Id == id && (x.IsDeleted || !x.IsDeleted));
+        return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
     public async Task<PagedResultDto<UserDto>> GetListIncludingDeletedAsync(int pageIndex, int pageSize, string? searchText = null)
     {
-        using (_dataFilter.Disable<ISoftDelete>())
+        var queryable = (await _userRepository.GetQueryableAsync())
+            .Where(x=> x.IsDeleted || !x.IsDeleted)
+            .WhereIf(!string.IsNullOrWhiteSpace(searchText), x => x.NickName.Contains(searchText) || x.Account.Contains(searchText) || x.Email.Contains(searchText) || x.PhoneNumber.Contains(searchText));
+        int total = queryable.Count();
+        var data = queryable.Skip((pageIndex-1)*pageSize).Take(pageSize).ToList();
+        return new PagedResultDto<UserDto>()
         {
-            return await GetListAsync(pageIndex, pageSize, searchText);
-        }
+            TotalCount = total,
+            Items = ObjectMapper.Map<List<UserData>, List<UserDto>>(data)
+        };
     }
 
     public async Task DeleteIncludingDeletedAsync(Guid id)
     {
-        using (_dataFilter.Disable<ISoftDelete>())
-        {
-            await DeleteAsync(id);
-        }
+        await _userRepository.DeleteAsync(x=> x.Id == id && (x.IsDeleted || !x.IsDeleted));
     }
 
-    public Task<UserDto> UpdateUserIncludingDeletedAsync(Guid id, CreateOrUpdateUserWithRolesDto input)
+    public async Task<UserDto> UpdateUserIncludingDeletedAsync(Guid id, CreateOrUpdateUserWithRolesDto input)
     {
-        using (_dataFilter.Disable<ISoftDelete>())
+        var userData = await _userRepository.GetAsync(x=> x.Id == id && (x.IsDeleted ||!x.IsDeleted));
+        userData.SetAccount(input.Account);
+        userData.SetName(input.UserName);
+        userData.SetEmail(input.Email, input.EmailVerified);
+        userData.SetPhoneNumber(input.PhoneNumber, input.PhoneNumberVerified);
+        userData.AllowUser(input.AllowStartTime, input.AllowEndTime);
+        userData.LockUser(input.LockStartTime, input.LockEndDate);
+        if (!string.IsNullOrWhiteSpace(input.Password))
         {
-            return UpdateUserAsync(id, input);
+            userData.SetPassword(input.Password);
         }
+
+        Dictionary<Guid, Guid> roleIds = new Dictionary<Guid, Guid>();
+        input.RoleIds.ForEach(roleId => { roleIds.Add(GuidGenerator.Create(), roleId); });
+        userData.SetRoles(roleIds);
+
+        await _userRepository.UpdateAsync(userData);
+        return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 }
