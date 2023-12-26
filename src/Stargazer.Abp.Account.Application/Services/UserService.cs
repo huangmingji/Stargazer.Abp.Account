@@ -54,7 +54,7 @@ public class UserService : ApplicationService, IUserService
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
 
-        var role = await _roleRepository.FirstOrDefaultAsync(x => x.IsDefault);
+        var role = await _roleRepository.FindAsync(x => x.IsDefault);
         if (role != null)
         {
             userData.AddRole(GuidGenerator.Create(), role.Id);
@@ -186,21 +186,21 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto?> FindByPhoneNumberAsync(string phoneNumber)
     {
-        var userData = await _userRepository.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var userData = await _userRepository.FindAsync(x => x.PhoneNumber == phoneNumber);
         if (userData == null) return null;
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
     public async Task<UserDto?> FindByEmailAsync(string email)
     {
-        var userData = await _userRepository.FirstOrDefaultAsync(x => x.Email == email);
+        var userData = await _userRepository.FindAsync(x => x.Email == email);
         if (userData == null) return null;
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
 
     public async Task<UserDto?> FindByAccountAsync(string account)
     {
-        var userData = await _userRepository.FirstOrDefaultAsync(x => x.Account == account);
+        var userData = await _userRepository.FindAsync(x => x.Account == account);
         if (userData == null) return null;
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }
@@ -256,7 +256,7 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto> VerifyPasswordAsync(VerifyPasswordDto input)
     {
-        UserData? userData = await _userRepository.FirstOrDefaultAsync(x =>
+        UserData? userData = await _userRepository.FindAsync(x =>
             x.Account == input.Name
             || x.PhoneNumber == input.Name
             || x.Email == input.Name);
@@ -279,7 +279,7 @@ public class UserService : ApplicationService, IUserService
 
     public async Task<UserDto> VerifyPasswordAsync(Guid id, string password)
     {
-        UserData? userData = await _userRepository.FirstOrDefaultAsync(x => x.Id == id);
+        UserData? userData = await _userRepository.FindAsync(x => x.Id == id);
         if (userData == null)
         {
             throw new UserFriendlyException("账号不存在");
