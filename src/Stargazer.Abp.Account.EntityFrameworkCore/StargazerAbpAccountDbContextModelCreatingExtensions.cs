@@ -13,7 +13,7 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore
             Check.NotNull(builder, nameof(builder));
             builder.ConfigureAccount();
         }
-        
+
         private static void ConfigureAccount(this ModelBuilder builder)
         {
             builder.Entity<RoleData>(b =>
@@ -26,21 +26,25 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore
                 b.ConfigureAuditedAggregateRoot();
                 b.ConfigureByConvention();
             });
-            
+
             builder.Entity<RolePermissionData>(b =>
             {
                 b.ToTable("RolePermissionData");
-                b.HasKey(x => x.Id );
+                b.HasKey(x => x.Id);
+                b.HasOne(x => x.PermissionData)
+                    .WithMany()
+                    .HasForeignKey(x => x.PermissionId);
+                b.ConfigureAuditedAggregateRoot();
                 b.ConfigureByConvention();
             });
-            
+
             builder.Entity<PermissionData>(b =>
             {
                 b.ToTable("PermissionData");
                 b.HasKey(o => o.Id);
                 b.ConfigureByConvention();
             });
-            
+
             builder.Entity<UserData>(b =>
             {
                 b.ToTable("UserData");
@@ -58,7 +62,7 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore
             builder.Entity<UserRole>(b =>
             {
                 b.ToTable("UserRole");
-                b.HasKey(x=> x.Id);
+                b.HasKey(x => x.Id);
                 b.HasOne(x => x.RoleData)
                     .WithMany()
                     .HasForeignKey(x => x.RoleId);

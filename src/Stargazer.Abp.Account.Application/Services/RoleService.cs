@@ -26,7 +26,7 @@ namespace Stargazer.Abp.Account.Application.Services
             await _roleRepository.CheckNotNull(input.Name);
             var roleData = new RoleData(
                 GuidGenerator.Create(), input.Name, input.IsDefault, false, false);
-            input.Permissions?.ForEach(item =>
+            input.PermissionIds?.ForEach(item =>
             {
                 roleData.Permissions.Add(new RolePermissionData(GuidGenerator.Create(), roleData.Id, item));
             });
@@ -50,7 +50,7 @@ namespace Stargazer.Abp.Account.Application.Services
             await _roleRepository.CheckNotNull(input.Name);
             var roleData = new RoleData(
                 GuidGenerator.Create(), input.Name, input.IsDefault, false, true);
-            input.Permissions?.ForEach(item =>
+            input.PermissionIds?.ForEach(item =>
             {
                 roleData.Permissions.Add(new RolePermissionData(GuidGenerator.Create(), roleData.Id, item));
             });
@@ -98,9 +98,9 @@ namespace Stargazer.Abp.Account.Application.Services
             await _roleRepository.CheckNotNull(input.Name, id);
             var roleData = await _roleRepository.GetAsync(x => x.Id == id);
             roleData.Name = input.Name;
-            roleData.Permissions.RemoveAll(x => !input.Permissions.Contains(x.Permission));
-            input.Permissions?.ForEach(item => {
-                if (!roleData.Permissions.Exists(x => x.Permission == item))
+            roleData.Permissions.RemoveAll(x => !input.PermissionIds.Contains(x.PermissionId));
+            input.PermissionIds?.ForEach(item => {
+                if (!roleData.Permissions.Exists(x => x.PermissionId == item))
                 {
                     roleData.Permissions.Add(new RolePermissionData(GuidGenerator.Create(), roleData.Id, item));
                 }

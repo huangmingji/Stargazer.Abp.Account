@@ -11,6 +11,6 @@ namespace Stargazer.Abp.Account.Application.Contracts.Roles.Dtos
         /// </summary>
         public bool IsDefault { get; set; }
 
-        public List<string>? Permissions { get; set; }
+        public List<Guid>? PermissionIds { get; set; }
     }
 }

@@ -16,7 +16,7 @@ public class AccountAuthorization : IAccountAuthorization, ITransientDependency
 
     public void CheckAccountPolicy(UserDto user, string policyName)
     {
-        if (!user.UserRoles.Exists(role => role.RoleData.Permissions.Exists(data => data.Permission == policyName)))
+        if (!user.UserRoles.Exists(role => role.RoleData.Permissions.Exists(data => data.PermissionData.Permission == policyName)))
         {
             throw new AccountAuthorizationException(user.Id, policyName);
         }

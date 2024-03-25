@@ -17,8 +17,8 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Permission = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Permission = table.Column<string>(type: "text", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -35,12 +35,12 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     IsDefault = table.Column<bool>(type: "boolean", nullable: false),
                     IsStatic = table.Column<bool>(type: "boolean", nullable: false),
                     IsPublic = table.Column<bool>(type: "boolean", nullable: false),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -56,15 +56,15 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Account = table.Column<string>(type: "text", nullable: true),
-                    NickName = table.Column<string>(type: "text", nullable: true),
-                    HeadIcon = table.Column<string>(type: "text", nullable: true),
+                    Account = table.Column<string>(type: "text", nullable: false),
+                    NickName = table.Column<string>(type: "text", nullable: false),
+                    HeadIcon = table.Column<string>(type: "text", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     PhoneNumberVerified = table.Column<bool>(type: "boolean", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: true),
                     EmailVerified = table.Column<bool>(type: "boolean", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: true),
-                    SecretKey = table.Column<string>(type: "text", nullable: true),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    SecretKey = table.Column<string>(type: "text", nullable: false),
                     MultiUserLogin = table.Column<bool>(type: "boolean", nullable: false),
                     LogonCount = table.Column<int>(type: "integer", nullable: false),
                     UserOnline = table.Column<bool>(type: "boolean", nullable: false),
@@ -77,8 +77,8 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                     LastVisitTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ChangPasswordDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -95,11 +95,23 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Permission = table.Column<string>(type: "text", nullable: true)
+                    PermissionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RolePermissionData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RolePermissionData_PermissionData_PermissionId",
+                        column: x => x.PermissionId,
+                        principalTable: "PermissionData",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RolePermissionData_RoleData_RoleId",
                         column: x => x.RoleId,
@@ -116,8 +128,8 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -139,6 +151,11 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RolePermissionData_PermissionId",
+                table: "RolePermissionData",
+                column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RolePermissionData_RoleId",
@@ -179,13 +196,13 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PermissionData");
-
-            migrationBuilder.DropTable(
                 name: "RolePermissionData");
 
             migrationBuilder.DropTable(
                 name: "UserRole");
+
+            migrationBuilder.DropTable(
+                name: "PermissionData");
 
             migrationBuilder.DropTable(
                 name: "RoleData");

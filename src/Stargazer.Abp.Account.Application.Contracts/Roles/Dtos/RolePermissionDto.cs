@@ -1,4 +1,5 @@
 using System;
+using Stargazer.Abp.Account.Application.Contracts.Permissions.Dtos;
 
 namespace Stargazer.Abp.Account.Application.Contracts.Roles.Dtos
 {
@@ -9,6 +10,8 @@ namespace Stargazer.Abp.Account.Application.Contracts.Roles.Dtos
         
         public Guid RoleId { get; set; }
 
-        public string Permission { get; set; } = "";
+        public Guid PermissionId { get; set; }
+
+        public PermissionDto PermissionData { get; set; }
     }
 }

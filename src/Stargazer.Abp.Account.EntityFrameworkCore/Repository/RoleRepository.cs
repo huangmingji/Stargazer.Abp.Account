@@ -19,9 +19,9 @@ public class RoleRepository : EfCoreRepository<AccountDbContext, RoleData, Guid>
     public override async Task<IQueryable<RoleData>> WithDetailsAsync()
     {
         var queryable = await GetQueryableAsync();
-        return queryable.Include(x => x.Permissions);
+        return queryable.Include(x => x.Permissions).ThenInclude(x => x.PermissionData);
     }
-    
+
     public async Task CheckNotNull(string name, Guid? id = null)
     {
         var queryable = await GetQueryableAsync();

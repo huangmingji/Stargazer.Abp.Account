@@ -123,7 +123,7 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
             {
                 if (userRoleDto.RoleData != null)
                 {
-                    permissions.AddRange(userRoleDto.RoleData.Permissions.ConvertAll(x => x.Permission));
+                    permissions.AddRange(userRoleDto.RoleData.Permissions.ConvertAll(x => x.PermissionData.Permission));
                 }
             }
             return permissions;
