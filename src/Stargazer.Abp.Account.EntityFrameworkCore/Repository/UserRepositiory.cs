@@ -24,7 +24,8 @@ namespace Stargazer.Abp.Account.EntityFrameworkCore.Repository
             var queryable = await GetQueryableAsync();
             return queryable.Include(x => x.UserRoles)
                 .ThenInclude(x => x.RoleData)
-                .ThenInclude(x => x.Permissions);
+                .ThenInclude(x => x.Permissions)
+                .ThenInclude(x=> x.PermissionData);
         }
 
         public async Task<List<UserData>> GetListByPageAsync(Expression<Func<UserData, bool>> expression, int pageIndex,
