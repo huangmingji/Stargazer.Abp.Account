@@ -17,7 +17,6 @@ namespace Stargazer.Abp.Account.Application.Contracts
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.AddScoped<IAccountAuthorization, AccountAuthorization>();
-            AccountPermissionDefinitionProvider.Define();
         }
     }
 }
