@@ -9,21 +9,21 @@ public class AccountPermissionDefinitionProvider : PermissionDefinitionProvider
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var accountGroup = context.AddGroup("account", L("user center"));
-        var userPermissionDefinition = accountGroup.AddPermission(User.Manage, L("user management"));
-        userPermissionDefinition.AddChild(User.Create, L("create user"));
-        userPermissionDefinition.AddChild(User.Update, L("update user"));
-        userPermissionDefinition.AddChild(User.Delete, L("delete user"));
+        var accountGroup = context.AddGroup("account", L("UserCenter"));
+        var userPermissionDefinition = accountGroup.AddPermission(User.Manage, L("UserManagement"));
+        userPermissionDefinition.AddChild(User.Create, L("CreateUser"));
+        userPermissionDefinition.AddChild(User.Update, L("UpdateUser"));
+        userPermissionDefinition.AddChild(User.Delete, L("DeleteUser"));
 
-        var rolePermissionDefinition = accountGroup.AddPermission(Role.Manage, L("role management"));
-        rolePermissionDefinition.AddChild(Role.Create, L("create role"));
-        rolePermissionDefinition.AddChild(Role.Update, L("update role"));
-        rolePermissionDefinition.AddChild(Role.Delete, L("delete role"));
+        var rolePermissionDefinition = accountGroup.AddPermission(Role.Manage, L("RoleManagement"));
+        rolePermissionDefinition.AddChild(Role.Create, L("CreateRole"));
+        rolePermissionDefinition.AddChild(Role.Update, L("UpdateRole"));
+        rolePermissionDefinition.AddChild(Role.Delete, L("DeleteRole"));
 
-        var permissionPermissionDefinition = accountGroup.AddPermission(Permission.Manage, L("permission management"));
-        permissionPermissionDefinition.AddChild(Permission.Create, L("create permission"));
-        permissionPermissionDefinition.AddChild(Permission.Update, L("update permission"));
-        permissionPermissionDefinition.AddChild(Permission.Delete, L("delete permission"));
+        var permissionPermissionDefinition = accountGroup.AddPermission(Permission.Manage, L("PermissionManagement"));
+        permissionPermissionDefinition.AddChild(Permission.Create, L("CreatePermission"));
+        permissionPermissionDefinition.AddChild(Permission.Update, L("UpdatePermission"));
+        permissionPermissionDefinition.AddChild(Permission.Delete, L("DeletePermission"));
     }
 
     private static LocalizableString L(string name)

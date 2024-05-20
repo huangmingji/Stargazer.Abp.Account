@@ -1,11 +1,24 @@
 ﻿{
     "culture": "zh-Hans",
     "texts": {
-        "User management": "用户管理",
-        "Role management": "角色管理",
-        "Permission management": "权限管理",
-        "Create": "新增",
-        "Update": "修改",
-        "Delete": "删除"
+        "UserCenter": "用户中心",
+        "UserManagement": "用户管理",
+        "CreateUser": "创建用户",
+        "UpdateUser": "修改用户",
+        "DeleteUser": "删除用户",
+        "RoleManagement": "角色管理",
+        "CreateRole": "创建角色",
+        "UpdateRole": "修改角色",
+        "DeleteRole": "删除角色",
+        "PermissionManagement": "权限管理",
+        "CreatePermission": "创建权限",
+        "UpdatePermission": "修改权限",
+        "DeletePermission": "删除权限",
+        "UserName": "用户名",
+        "Password": "密码",
+        "Email": "邮箱",
+        "Role": "角色",
+        "Permissions": "权限",
+        "Save": "保存"
     }
 }

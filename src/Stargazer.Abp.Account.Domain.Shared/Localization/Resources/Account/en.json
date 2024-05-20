@@ -1,11 +1,24 @@
 ﻿{
     "culture": "en",
     "texts": {
-        "User management": "User management",
-        "Role management": "Role management",
-        "Permission management": "Permission management",
-        "Create": "Create",
-        "Update": "Update",
-        "Delete": "Delete"
+        "UserCenter": "user center",
+        "UserManagement": "user management",
+        "CreateUser": "create user",
+        "UpdateUser": "update user",
+        "DeleteUser": "delete user",
+        "RoleManagement": "role management",
+        "CreateRole": "create role",
+        "UpdateRole": "update role",
+        "DeleteRole": "delete role",
+        "PermissionManagement": "permission management",
+        "CreatePermission": "create permission",
+        "UpdatePermission": "update permission",
+        "DeletePermission": "delete permission",
+        "UserName": "user name",
+        "Password": "password",
+        "Email": "email",
+        "Role": "role",
+        "Permissions": "permissions",
+        "Save": "save"
     }
 }

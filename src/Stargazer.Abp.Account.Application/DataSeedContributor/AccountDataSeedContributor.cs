@@ -38,28 +38,28 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
                 var data = permissions.FirstOrDefault(x => x.Permission == User.Manage);
                 if (data == null)
                 {
-                    data = new PermissionData(_guidGenerator.Create(), L("user management").Name, User.Manage);
+                    data = new PermissionData(_guidGenerator.Create(), L("UserManagement").Name, User.Manage);
                     await _permissionRepository.InsertAsync(data);
                 }
 
                 var createUser = permissions.FirstOrDefault(x => x.Permission == User.Create);
                 if (createUser == null)
                 {
-                    createUser = new PermissionData(_guidGenerator.Create(), L("create user").Name, User.Create, data.Id);
+                    createUser = new PermissionData(_guidGenerator.Create(), L("CreateUser").Name, User.Create, data.Id);
                     await _permissionRepository.InsertAsync(createUser);
                 }
 
                 var updateUser = permissions.FirstOrDefault(x => x.Permission == User.Update);
                 if (updateUser == null)
                 {
-                    updateUser = new PermissionData(_guidGenerator.Create(), L("update user").Name, User.Update, data.Id);
+                    updateUser = new PermissionData(_guidGenerator.Create(), L("UpdateUser").Name, User.Update, data.Id);
                     await _permissionRepository.InsertAsync(updateUser);
                 }
 
                 var deleteUser = permissions.FirstOrDefault(x => x.Permission == User.Delete);
                 if (deleteUser == null)
                 {
-                    deleteUser = new PermissionData(_guidGenerator.Create(), L("delete user").Name, User.Delete, data.Id);
+                    deleteUser = new PermissionData(_guidGenerator.Create(), L("DeleteUser").Name, User.Delete, data.Id);
                     await _permissionRepository.InsertAsync(deleteUser);
                 }
             }
@@ -68,28 +68,28 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
                 var data = permissions.FirstOrDefault(x => x.Permission == Role.Manage);
                 if (data == null)
                 {
-                    data = new PermissionData(_guidGenerator.Create(), L("role management").Name, Role.Manage);
+                    data = new PermissionData(_guidGenerator.Create(), L("RoleManagement").Name, Role.Manage);
                     await _permissionRepository.InsertAsync(data);
                 }
 
                 var createRole = permissions.FirstOrDefault(x => x.Permission == Role.Create);
                 if (createRole == null)
                 {
-                    createRole = new PermissionData(_guidGenerator.Create(), L("create role").Name, Role.Create, data.Id);
+                    createRole = new PermissionData(_guidGenerator.Create(), L("CreateRole").Name, Role.Create, data.Id);
                     await _permissionRepository.InsertAsync(createRole);
                 }
 
                 var updateRole = permissions.FirstOrDefault(x => x.Permission == Role.Update);
                 if (updateRole == null)
                 {
-                    updateRole = new PermissionData(_guidGenerator.Create(), L("update role").Name, Role.Update, data.Id);
+                    updateRole = new PermissionData(_guidGenerator.Create(), L("UpdateRole").Name, Role.Update, data.Id);
                     await _permissionRepository.InsertAsync(updateRole);
                 }
 
                 var deleteRole = permissions.FirstOrDefault(x => x.Permission == Role.Delete);
                 if (deleteRole == null)
                 {
-                    deleteRole = new PermissionData(_guidGenerator.Create(), L("delete role").Name, Role.Delete, data.Id);
+                    deleteRole = new PermissionData(_guidGenerator.Create(), L("DeleteRole").Name, Role.Delete, data.Id);
                     await _permissionRepository.InsertAsync(deleteRole);
                 }
             }
@@ -98,28 +98,28 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
                 var data = permissions.FirstOrDefault(x=> x.Permission == Permission.Manage);
                 if (data == null)
                 {
-                    data = new PermissionData(_guidGenerator.Create(), L("permission management").Name, Permission.Manage);
+                    data = new PermissionData(_guidGenerator.Create(), L("PermissionManagement").Name, Permission.Manage);
                     await _permissionRepository.InsertAsync(data);
                 }
 
                 var createPermission = permissions.FirstOrDefault(x=> x.Permission == Permission.Create);
                 if (createPermission == null)
                 {
-                    createPermission = new PermissionData(_guidGenerator.Create(), L("create permission").Name, Permission.Create, data.Id);
+                    createPermission = new PermissionData(_guidGenerator.Create(), L("CreatePermission").Name, Permission.Create, data.Id);
                     await _permissionRepository.InsertAsync(createPermission);
                 }
 
                 var updatePermission = permissions.FirstOrDefault(x=> x.Permission == Permission.Update);
                 if (updatePermission == null)
                 {
-                    updatePermission = new PermissionData(_guidGenerator.Create(), L("update permission").Name, Permission.Update, data.Id);
+                    updatePermission = new PermissionData(_guidGenerator.Create(), L("UpdatePermission").Name, Permission.Update, data.Id);
                     await _permissionRepository.InsertAsync(updatePermission);
                 }
 
                 var deletePermission = permissions.FirstOrDefault(x=> x.Permission == Permission.Delete);
                 if (deletePermission == null)
                 {
-                    deletePermission = new PermissionData(_guidGenerator.Create(), L("delete permission").Name, Permission.Delete, data.Id);
+                    deletePermission = new PermissionData(_guidGenerator.Create(), L("DeletePermission").Name, Permission.Delete, data.Id);
                     await _permissionRepository.InsertAsync(deletePermission);
                 }
 

@@ -17,7 +17,7 @@ namespace Stargazer.Abp.Account.Domain.Shared
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<StargazerAbpAccountDomainSharedModule>("Stargazer.Abp.Account");
+                options.FileSets.AddEmbedded<StargazerAbpAccountDomainSharedModule>();
             });
             Configure<AbpLocalizationOptions>(options =>
             {
