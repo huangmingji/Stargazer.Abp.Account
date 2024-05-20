@@ -19,6 +19,7 @@
         "Email": "email",
         "Role": "role",
         "Permissions": "permissions",
-        "Save": "save"
+        "Save": "save",
+        "UserPasswordError": "user password error"
     }
 }

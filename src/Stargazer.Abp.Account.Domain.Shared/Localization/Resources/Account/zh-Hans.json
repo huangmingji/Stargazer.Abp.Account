@@ -19,6 +19,7 @@
         "Email": "邮箱",
         "Role": "角色",
         "Permissions": "权限",
-        "Save": "保存"
+        "Save": "保存",
+        "UserPasswordError": "用户名或密码错误"
     }
 }
