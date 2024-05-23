@@ -1,6 +1,8 @@
+using Microsoft.Extensions.Localization;
 using Stargazer.Abp.Account.Domain.Repository;
 using Stargazer.Abp.Account.Domain.Role;
 using Stargazer.Abp.Account.Domain.Shared;
+using Stargazer.Abp.Account.Domain.Shared.Localization.Resources;
 using Stargazer.Abp.Account.Domain.Users;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -18,13 +20,15 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
     private readonly IRoleRepository _roleRepository;
     private readonly ICurrentTenant _currentTenant;
     private readonly IGuidGenerator _guidGenerator;
-    public AccountDataSeedContributor(IRepository<PermissionData, Guid> permissionRepository, ICurrentTenant currentTenant, IGuidGenerator guidGenerator, IRoleRepository roleRepository, IUserRepository userRepository)
+    private readonly IStringLocalizer<AccountResource> _localizer;
+    public AccountDataSeedContributor(IRepository<PermissionData, Guid> permissionRepository, ICurrentTenant currentTenant, IGuidGenerator guidGenerator, IRoleRepository roleRepository, IUserRepository userRepository, IStringLocalizer<AccountResource> localizer)
     {
         _permissionRepository = permissionRepository;
         _currentTenant = currentTenant;
         _guidGenerator = guidGenerator;
         _roleRepository = roleRepository;
         _userRepository = userRepository;
+        _localizer = localizer;
     }
 
     public async Task SeedAsync(DataSeedContext context)
@@ -45,28 +49,28 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
             var data = permissions.FirstOrDefault(x => x.Permission == User.Manage);
             if (data == null)
             {
-                data = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("UserManagement").Name, User.Manage);
+                data = new PermissionData(_guidGenerator.Create(), _localizer["UserManagement"], User.Manage);
                 _ = await _permissionRepository.InsertAsync(data);
             }
 
             var createUser = permissions.FirstOrDefault(x => x.Permission == User.Create);
             if (createUser == null)
             {
-                createUser = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("CreateUser").Name, User.Create, data.Id);
+                createUser = new PermissionData(_guidGenerator.Create(), _localizer["CreateUser"], User.Create, data.Id);
                 _ = await _permissionRepository.InsertAsync(createUser);
             }
 
             var updateUser = permissions.FirstOrDefault(x => x.Permission == User.Update);
             if (updateUser == null)
             {
-                updateUser = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("UpdateUser").Name, User.Update, data.Id);
+                updateUser = new PermissionData(_guidGenerator.Create(), _localizer["UpdateUser"], User.Update, data.Id);
                 _ = await _permissionRepository.InsertAsync(updateUser);
             }
 
             var deleteUser = permissions.FirstOrDefault(x => x.Permission == User.Delete);
             if (deleteUser == null)
             {
-                deleteUser = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("DeleteUser").Name, User.Delete, data.Id);
+                deleteUser = new PermissionData(_guidGenerator.Create(), _localizer["DeleteUser"], User.Delete, data.Id);
                 _ = await _permissionRepository.InsertAsync(deleteUser);
             }
         }
@@ -75,28 +79,28 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
             var data = permissions.FirstOrDefault(x => x.Permission == Role.Manage);
             if (data == null)
             {
-                data = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("RoleManagement").Name, Role.Manage);
+                data = new PermissionData(_guidGenerator.Create(), _localizer["RoleManagement"], Role.Manage);
                 _ = await _permissionRepository.InsertAsync(data);
             }
 
             var createRole = permissions.FirstOrDefault(x => x.Permission == Role.Create);
             if (createRole == null)
             {
-                createRole = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("CreateRole").Name, Role.Create, data.Id);
+                createRole = new PermissionData(_guidGenerator.Create(), _localizer["CreateRole"], Role.Create, data.Id);
                 _ = await _permissionRepository.InsertAsync(createRole);
             }
 
             var updateRole = permissions.FirstOrDefault(x => x.Permission == Role.Update);
             if (updateRole == null)
             {
-                updateRole = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("UpdateRole").Name, Role.Update, data.Id);
+                updateRole = new PermissionData(_guidGenerator.Create(), _localizer["UpdateRole"], Role.Update, data.Id);
                 _ = await _permissionRepository.InsertAsync(updateRole);
             }
 
             var deleteRole = permissions.FirstOrDefault(x => x.Permission == Role.Delete);
             if (deleteRole == null)
             {
-                deleteRole = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("DeleteRole").Name, Role.Delete, data.Id);
+                deleteRole = new PermissionData(_guidGenerator.Create(), _localizer["DeleteRole"], Role.Delete, data.Id);
                 _ = await _permissionRepository.InsertAsync(deleteRole);
             }
         }
@@ -105,28 +109,28 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
             var data = permissions.FirstOrDefault(x => x.Permission == Permission.Manage);
             if (data == null)
             {
-                data = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("PermissionManagement").Name, Permission.Manage);
+                data = new PermissionData(_guidGenerator.Create(), _localizer["PermissionManagement"], Permission.Manage);
                 _ = await _permissionRepository.InsertAsync(data);
             }
 
             var createPermission = permissions.FirstOrDefault(x => x.Permission == Permission.Create);
             if (createPermission == null)
             {
-                createPermission = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("CreatePermission").Name, Permission.Create, data.Id);
+                createPermission = new PermissionData(_guidGenerator.Create(), _localizer["CreatePermission"], Permission.Create, data.Id);
                 _ = await _permissionRepository.InsertAsync(createPermission);
             }
 
             var updatePermission = permissions.FirstOrDefault(x => x.Permission == Permission.Update);
             if (updatePermission == null)
             {
-                updatePermission = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("UpdatePermission").Name, Permission.Update, data.Id);
+                updatePermission = new PermissionData(_guidGenerator.Create(), _localizer["UpdatePermission"], Permission.Update, data.Id);
                 _ = await _permissionRepository.InsertAsync(updatePermission);
             }
 
             var deletePermission = permissions.FirstOrDefault(x => x.Permission == Permission.Delete);
             if (deletePermission == null)
             {
-                deletePermission = new PermissionData(_guidGenerator.Create(), LocalizationExtension.L("DeletePermission").Name, Permission.Delete, data.Id);
+                deletePermission = new PermissionData(_guidGenerator.Create(), _localizer["DeletePermission"], Permission.Delete, data.Id);
                 _ = await _permissionRepository.InsertAsync(deletePermission);
             }
         }
@@ -134,10 +138,11 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
 
     private async Task InitRole()
     {
-        var role = await _roleRepository.FindAsync(x => x.Name == "AccountManager");
+        string roleName = _localizer["UserCenterManager"];
+        var role = await _roleRepository.FindAsync(x => x.Name == roleName);
         if (role == null)
         {
-            role = new RoleData(_guidGenerator.Create(), "AccountManager", false, true, true);
+            role = new RoleData(_guidGenerator.Create(), roleName, false, true, true);
             role = await _roleRepository.InsertAsync(role, true);
         }
 
@@ -177,7 +182,8 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
             user = new UserData(_guidGenerator.Create(), "admin", "admin", "admin");
             user.SetPassword("Admin12345678");
 
-            var role = await _roleRepository.GetAsync(x => x.Name == "AccountManager");
+            string roleName = _localizer["UserCenterManager"];
+            var role = await _roleRepository.GetAsync(x => x.Name == roleName);
             user.AddRole(_guidGenerator.Create(), role.Id);
             _ = await _userRepository.InsertAsync(user);
         }

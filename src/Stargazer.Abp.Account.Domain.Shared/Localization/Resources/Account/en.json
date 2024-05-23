@@ -2,6 +2,7 @@
     "culture": "en",
     "texts": {
         "UserCenter": "user center",
+        "UserCenterManager": "user center manager",
         "UserManagement": "user management",
         "CreateUser": "create user",
         "UpdateUser": "update user",
