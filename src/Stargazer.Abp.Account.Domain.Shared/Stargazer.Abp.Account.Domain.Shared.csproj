@@ -9,30 +9,17 @@
     <Company>Stargazer</Company>
     <PackageDescription>一个基于ABP的用户模块</PackageDescription>
     <RepositoryUrl>https://github.com/huangmingji/Stargazer.Abp.Account</RepositoryUrl>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.19" />
     <PackageReference Include="Volo.Abp.Validation" Version="7.4.2" />
     <PackageReference Include="Volo.Abp.Localization" Version="7.4.2" />
   </ItemGroup>
+  
   <ItemGroup>
-    <None Remove="Localization\" />
-    <None Remove="Localization\Resources\" />
-    <None Remove="Localization\Resources\Account\" />
-    <None Remove="Localization\Resources\Account\en.json" />
-    <None Remove="Localization\Resources\Account\zh-Hans.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Localization\" />
-    <Folder Include="Localization\Resources\" />
-    <Folder Include="Localization\Resources\Account\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Localization\Resources\Account\en.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Localization\Resources\Account\zh-Hans.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\Resources\**\*.*" />
+    <Content Remove="Localization\Resources\**\*.*" />
   </ItemGroup>
 </Project>
