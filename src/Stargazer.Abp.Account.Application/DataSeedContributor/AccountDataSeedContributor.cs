@@ -131,34 +131,33 @@ public class AccountDataSeedContributor : IDataSeedContributor, ITransientDepend
 
     private async Task InitRole()
     {
-        var role = await _roleRepository.FindAsync(x=> x.Name == "AccountManager");
-        if(role != null)
+        var role = await _roleRepository.FindAsync(x => x.Name == "AccountManager");
+        if (role == null)
         {
-            return;
+            role = new RoleData(_guidGenerator.Create(), "AccountManager", false, true, true);
+            role = await _roleRepository.InsertAsync(role, true);
         }
 
-        role = new RoleData(_guidGenerator.Create(), "AccountManager", false, true, true);
-        
         role = await RoleAddPermission(Permission.Manage, role);
         role = await RoleAddPermission(Role.Manage, role);
         role = await RoleAddPermission(User.Manage, role);
 
-        await _roleRepository.InsertAsync(role);
+        await _roleRepository.UpdateAsync(role);
     }
 
     private async Task<RoleData> RoleAddPermission(string permissionName, RoleData role)
     {
-        var permission = await _permissionRepository.GetAsync(x=> x.Name == permissionName);
-        var permissions = await _permissionRepository.GetListAsync(x=> x.ParentId == permission.Id);
-        
-        if(role.Permissions.All(x=>x.PermissionId != permission.Id))
+        var permission = await _permissionRepository.GetAsync(x => x.Permission == permissionName);
+        var permissions = await _permissionRepository.GetListAsync(x => x.ParentId == permission.Id);
+
+        if (role.Permissions.All(x => x.PermissionId != permission.Id))
         {
             role.Permissions.Add(new RolePermissionData(_guidGenerator.Create(), role.Id, permission.Id));
         }
 
         foreach (var item in permissions)
         {
-            if(role.Permissions.All(x=>x.PermissionId != item.Id))
+            if (role.Permissions.All(x => x.PermissionId != item.Id))
             {
                 role.Permissions.Add(new RolePermissionData(_guidGenerator.Create(), role.Id, item.Id));
             }
