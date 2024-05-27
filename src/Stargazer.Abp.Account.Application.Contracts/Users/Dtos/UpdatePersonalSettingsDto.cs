@@ -17,6 +17,8 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
 
         public string City { get; set; } = "";
 
+        public string District { get; set; } = "";
+
         public string Address { get; set; } = "";
 
         public string TelephoneNumberAreaCode { get; set; } = "";

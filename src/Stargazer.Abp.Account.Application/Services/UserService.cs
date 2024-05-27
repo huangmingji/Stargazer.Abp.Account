@@ -346,7 +346,7 @@ public class UserService : ApplicationService, IUserService
         bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
         userData.SetEmail(input.Email, !verifyEmail);
         userData.SetPersonalProfile(input.PersonalProfile);
-        userData.SetAddress(input.Country, input.Province, input.City, input.Address);
+        userData.SetAddress(input.Country, input.Province, input.City, input.District, input.Address);
         userData.SetTelephoneNumber(input.TelephoneNumberAreaCode, input.TelephoneNumber);
         var result = await _userRepository.UpdateAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);

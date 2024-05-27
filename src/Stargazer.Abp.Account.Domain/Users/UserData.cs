@@ -172,6 +172,18 @@ namespace Stargazer.Abp.Account.Domain.Users
         }
 
         /// <summary>
+        /// 区
+        /// </summary>
+        [NotMapped]
+        public string District
+        {
+            get
+            {
+                return this.GetProperty<string>("District") ?? "";
+            }
+        }
+
+        /// <summary>
         /// 街道地址
         /// </summary>
         /// <value></value>
@@ -258,11 +270,12 @@ namespace Stargazer.Abp.Account.Domain.Users
             this.SetProperty("PersonalProfile", personalProfile);
         }
 
-        public void SetAddress(string country, string province, string city, string address)
+        public void SetAddress(string country, string province, string city, string district, string address)
         {
             this.SetProperty("Country", country);
             this.SetProperty("Province", province);
             this.SetProperty("City", city);
+            this.SetProperty("District", district);
             this.SetProperty("Address", address);
         }
 
