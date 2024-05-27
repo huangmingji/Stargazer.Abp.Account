@@ -8,6 +8,8 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Caching;
 using Volo.Abp.Users;
+using Microsoft.AspNetCore.Http;
+using Volo.Abp.Http;
 
 namespace Stargazer.Abp.Account.HttpApi.Controllers;
 
@@ -34,12 +36,31 @@ public class AccountController : AbpController
     }
 
     [HttpPost("")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
     public async Task<UserDto> CreateAccount(CreateUserDto input)
     {
         return await _userService.CreateAsync(input);
     }
 
+    [HttpPut("")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
+    public async Task<IActionResult> UpdateAsync(UpdatePersonalSettingsDto data)
+    {
+        var userDto = await _userService.UpdatePersonalSettingsAsync(CurrentUser.GetId(), data);
+        return Ok(userDto);
+    }
+
     [HttpPost("verify-email")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task VerifyEmailAsync(VerifyEmailDto input)
     {
         var user = await _userService.FindByEmailAsync(input.Email);
@@ -61,37 +82,60 @@ public class AccountController : AbpController
 
     [HttpGet("")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task<UserDto> GetAsync()
     {
-        return await _userService.GetAsync(_currentUser.Id.GetValueOrDefault());
+        return await _userService.GetAsync(_currentUser.GetId());
     }
 
     [HttpPut("name")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task<UserDto> UpdateUserName([FromBody] UpdateUserNameDto input)
     {
-        return await _userService.UpdateUserNameAsync(_currentUser.Id.GetValueOrDefault(), input);
+        return await _userService.UpdateUserNameAsync(_currentUser.GetId(), input);
     }
 
     [HttpPut("password")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task<UserDto> UpdatePassword([FromBody] UpdateUserPasswordDto input)
     {
-        return await _userService.UpdatePasswordAsync(_currentUser.Id.GetValueOrDefault(), input);
+        return await _userService.UpdatePasswordAsync(_currentUser.GetId(), input);
     }
 
     [HttpPut("email")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task<UserDto> UpdateEmailAsync([FromBody] UpdateEmailDto input)
     {
-        return await _userService.UpdateEmailAsync(_currentUser.Id.GetValueOrDefault(), input.Email);
+        return await _userService.UpdateEmailAsync(_currentUser.GetId(), input.Email);
     }
 
     [HttpPut("phone")]
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task<UserDto> UpdatePhoneNumberAsync([FromBody] UpdatePhoneNumberDto input)
     {
-        return await _userService.UpdatePhoneNumberAsync(_currentUser.Id.GetValueOrDefault(), input.PhoneNumber);
+        return await _userService.UpdatePhoneNumberAsync(_currentUser.GetId(), input.PhoneNumber);
     }
 
     [HttpPost("find-password")]
@@ -101,6 +145,9 @@ public class AccountController : AbpController
     }
 
     [HttpPut("reset-password")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
     public async Task ResetPasswordAsync(ResetPasswordDto input)
     {
         await _userService.ResetPasswordAsync(input);

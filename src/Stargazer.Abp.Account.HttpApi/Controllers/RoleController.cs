@@ -9,6 +9,7 @@ using Stargazer.Abp.Account.Application.Contracts.Roles;
 using Stargazer.Abp.Account.Application.Contracts.Roles.Dtos;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Http;
 
 namespace Stargazer.Abp.Account.HttpApi.Controllers
 {
@@ -27,7 +28,9 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [HttpPost("")]
         [Authorize(AccountPermissions.Role.Create)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoleDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
         public async Task<IActionResult> CreateAsync([FromBody]UpdateRoleDto data)
         {
             var result = await _roleService.CreatePublicAsync(data);
@@ -47,6 +50,7 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [Authorize(AccountPermissions.Role.Manage)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoleDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
         public async Task<IActionResult> GetAsync(Guid id)
         {
             var result = await _roleService.GetAsync(id);
@@ -66,7 +70,10 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [HttpPut("{id}")]
         [Authorize(AccountPermissions.Role.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RoleDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody]UpdateRoleDto data)
         {
             var result = await _roleService.UpdateAsync(id, data);

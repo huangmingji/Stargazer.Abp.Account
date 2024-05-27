@@ -322,7 +322,32 @@ public class UserService : ApplicationService, IUserService
             userData.SetPassword(input.Password);
         }
 
-        userData.Set(input.Name, input.Account, input.Email, input.PhoneNumber);
+        userData.SetData(input.Name, input.Account, input.Email, input.PhoneNumber);
+        var result = await _userRepository.UpdateAsync(userData);
+        return ObjectMapper.Map<UserData, UserDto>(userData);
+    }
+
+    public async Task<UserDto> UpdatePersonalSettingsAsync(Guid id, UpdatePersonalSettingsDto input)
+    {
+        UserData userData = await _userRepository.GetAsync(x => x.Id == id);
+
+        if(await _userRepository.AnyAsync(x => x.Id != id && x.NickName == input.Name))
+        {
+            throw new UserFriendlyException("昵称已存在");
+        }
+
+        if (!string.IsNullOrWhiteSpace(input.Email) &&
+            await _userRepository.AnyAsync(x => x.Id != id && x.Email == input.Email))
+        {
+            throw new UserFriendlyException("电子邮件地址已存在");
+        }
+
+        userData.SetName(input.Name);
+        bool verifyEmail = _configuration.GetSection("App:VerifyEmail").Value?.ToBool() ?? false;
+        userData.SetEmail(input.Email, !verifyEmail);
+        userData.SetPersonalProfile(input.PersonalProfile);
+        userData.SetAddress(input.Country, input.Province, input.City, input.Address);
+        userData.SetTelephoneNumber(input.TelephoneNumberAreaCode, input.TelephoneNumber);
         var result = await _userRepository.UpdateAsync(userData);
         return ObjectMapper.Map<UserData, UserDto>(userData);
     }

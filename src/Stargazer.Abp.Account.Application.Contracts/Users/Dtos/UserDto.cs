@@ -102,6 +102,20 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         /// </summary>
         public DateTime LastVisitTime { get; set; } = DateTime.Now;
 
+        public string PersonalProfile { get; set; } = "";
+
+        public string Country { get; set; } = "";
+
+        public string Province { get; set; } = "";
+
+        public string City { get; set; } = "";
+
+        public string Address { get; set; } = "";
+
+        public string TelephoneNumberAreaCode { get; set; } = "";
+
+        public string TelephoneNumber { get; set; } = "";
+
         /// <summary>
         /// 最后修改密码日期
         /// </summary>

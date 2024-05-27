@@ -1,6 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 using Stargazer.Abp.Account.Domain.Shared.Users;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
 using static Lemon.Common.Cryptography;
 
@@ -118,6 +120,96 @@ namespace Stargazer.Abp.Account.Domain.Users
         /// </summary>
         public DateTime ChangPasswordDate { get; protected set; } = DateTime.Now;
 
+        /// <summary>
+        /// 个人简介
+        /// </summary>
+        [NotMapped]
+        public string PersonalProfile
+        {
+            get
+            {
+                return this.GetProperty<string>("PersonalProfile") ?? "";
+            }
+        }
+
+        /// <summary>
+        /// 国家/地区
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public string Country
+        {
+            get
+            {
+                return this.GetProperty<string>("Country") ?? "";
+            }
+        }
+
+        /// <summary>
+        /// 省
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public string Province
+        {
+            get
+            {
+                return this.GetProperty<string>("Province") ?? "";
+            }
+        }
+
+        /// <summary>
+        /// 市
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public string City
+        {
+            get
+            {
+                return this.GetProperty<string>("City") ?? "";
+            }
+        }
+
+        /// <summary>
+        /// 街道地址
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public string Address
+        {
+            get
+            {
+                return this.GetProperty<string>("Address") ?? "";
+            }
+        }
+
+        /// <summary>
+        /// 电话区号
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public string TelephoneNumberAreaCode
+        {
+            get
+            {
+                return this.GetProperty<string>("TelephoneNumberAreaCode") ?? "";
+            }
+        }
+
+        /// <summary>
+        /// 固定电话
+        /// </summary>
+        /// <value></value>
+        [NotMapped]
+        public string TelephoneNumber
+        {
+            get
+            {
+                return this.GetProperty<string>("TelephoneNumber") ?? "";
+            }
+        }
+
         public List<UserRole> UserRoles = new List<UserRole>();
 
         public bool IsDeleted { get; set; }
@@ -161,7 +253,26 @@ namespace Stargazer.Abp.Account.Domain.Users
             }
         }
 
-        public void Set(string name, string account, string email, string phoneNumber)
+        public void SetPersonalProfile(string personalProfile)
+        {
+            this.SetProperty("PersonalProfile", personalProfile);
+        }
+
+        public void SetAddress(string country, string province, string city, string address)
+        {
+            this.SetProperty("Country", country);
+            this.SetProperty("Province", province);
+            this.SetProperty("City", city);
+            this.SetProperty("Address", address);
+        }
+
+        public void SetTelephoneNumber(string telephoneNumberAreaCode, string telephoneNumber)
+        {
+            this.SetProperty("TelephoneNumberAreaCode", telephoneNumberAreaCode);
+            this.SetProperty("TelephoneNumber", telephoneNumber);
+        }
+
+        public void SetData(string name, string account, string email, string phoneNumber)
         {
             Check.NotNullOrEmpty(name, nameof(name));
             Check.NotNullOrEmpty(account, nameof(account));

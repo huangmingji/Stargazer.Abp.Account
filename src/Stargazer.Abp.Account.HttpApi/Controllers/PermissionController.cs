@@ -8,6 +8,7 @@ using Stargazer.Abp.Account.Application.Contracts.Permissions;
 using Stargazer.Abp.Account.Application.Contracts.Permissions.Dtos;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Http;
 
 namespace Stargazer.Abp.Account.HttpApi.Controllers
 {
@@ -26,8 +27,10 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [HttpPost("")]
         [Authorize(AccountPermissions.Permission.Create)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PermissionDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> CreateAsync([FromBody]UpdatePermissionDto data)
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+        public async Task<IActionResult> CreateAsync([FromBody] UpdatePermissionDto data)
         {
             var result = await _permissionService.CreateAsync(data);
             return Ok(result);
@@ -46,6 +49,7 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [Authorize(AccountPermissions.Permission.Manage)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PermissionDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
         public async Task<IActionResult> GetAsync(Guid id)
         {
             var result = await _permissionService.GetAsync(id);
@@ -65,8 +69,11 @@ namespace Stargazer.Abp.Account.HttpApi.Controllers
         [HttpPut("{id}")]
         [Authorize(AccountPermissions.Permission.Update)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PermissionDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(RemoteServiceErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody]UpdatePermissionDto data)
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(RemoteServiceErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(RemoteServiceErrorResponse))]
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdatePermissionDto data)
         {
             var result = await _permissionService.UpdateAsync(id, data);
             return Ok(result);

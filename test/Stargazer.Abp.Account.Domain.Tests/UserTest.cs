@@ -1,4 +1,5 @@
 ﻿using System;
+using Lemon.Common.Extend;
 using Shouldly;
 using Stargazer.Abp.Account.Domain.Users;
 
@@ -64,10 +65,16 @@ public class UserTest
         user.AllowStartTime.ShouldBeEquivalentTo(allowStartTime);
         user.AllowEndTime.ShouldBeEquivalentTo(allowEndTime);
 
-        user.Set("tom", "tom1", "2290@163.com", "1029384756");
+        user.SetData("tom", "tom1", "2290@163.com", "1029384756");
         user.Account.ShouldBeEquivalentTo("tom1");
         user.NickName.ShouldBeEquivalentTo("tom");
         user.Email.ShouldBeEquivalentTo("2290@163.com");
         user.PhoneNumber.ShouldBeEquivalentTo("1029384756");
+
+        user.SetAddress("中国", "广东省", "zhognshan", "东区");
+        user.Country.ShouldBeEquivalentTo("中国");
+        user.Province.ShouldBeEquivalentTo("广东省");
+        user.City.ShouldBeEquivalentTo("zhognshan");
+        user.Address.ShouldBeEquivalentTo("东区");
     }
 }

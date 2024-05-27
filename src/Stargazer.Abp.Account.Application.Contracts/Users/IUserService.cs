@@ -55,6 +55,8 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
 
         Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto input);
 
+        Task<UserDto> UpdatePersonalSettingsAsync(Guid id, UpdatePersonalSettingsDto input);
+
         Task<UserDto> UpdateUserAsync(Guid id, CreateOrUpdateUserWithRolesDto input);
         
         Task<UserDto> UpdateUserIncludingDeletedAsync(Guid id, CreateOrUpdateUserWithRolesDto input);
