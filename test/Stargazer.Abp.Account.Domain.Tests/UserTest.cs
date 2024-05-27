@@ -71,10 +71,11 @@ public class UserTest
         user.Email.ShouldBeEquivalentTo("2290@163.com");
         user.PhoneNumber.ShouldBeEquivalentTo("1029384756");
 
-        user.SetAddress("中国", "广东省", "zhognshan", "东区");
+        user.SetAddress("中国", "广东省", "zhognshan", "东区", "中山一路");
         user.Country.ShouldBeEquivalentTo("中国");
         user.Province.ShouldBeEquivalentTo("广东省");
         user.City.ShouldBeEquivalentTo("zhognshan");
-        user.Address.ShouldBeEquivalentTo("东区");
+        user.District.ShouldBeEquivalentTo("东区");
+        user.Address.ShouldBeEquivalentTo("中山一路");
     }
 }
