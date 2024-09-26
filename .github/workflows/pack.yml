@@ -23,6 +23,9 @@ jobs:
       run: dotnet build --no-restore
 
     # pack
+    - name: Pack Stargazer.Abp.Authorization.Application.Contracts
+      run: dotnet pack ./src/Stargazer.Abp.Authorization.Application.Contracts -c Release -p:PackageVersion=${{ github.ref_name }}
+
     - name: Pack Stargazer.Abp.Account.Domain.Shared
       run: dotnet pack ./src/Stargazer.Abp.Account.Domain.Shared -c Release -p:PackageVersion=${{ github.ref_name }}
 
@@ -48,6 +51,9 @@ jobs:
       run: dotnet pack ./src/Stargazer.Abp.Account.HttpApi.Client -c Release -p:PackageVersion=${{ github.ref_name }}
       
     # push to github
+    - name: Push Stargazer.Abp.Authorization.Application.Contracts to github
+      run: dotnet nuget push ./src/Stargazer.Abp.Authorization.Application.Contracts/bin/Release/Stargazer.Abp.Authorization.Application.Contracts.*.nupkg --api-key ${{ secrets.GIT_PAT }} --source "https://nuget.pkg.github.com/huangmingji/index.json"
+
     - name: Push Stargazer.Abp.Account.Domain.Shared to github
       run: dotnet nuget push ./src/Stargazer.Abp.Account.Domain.Shared/bin/Release/Stargazer.Abp.Account.Domain.Shared.*.nupkg --api-key ${{ secrets.GIT_PAT }} --source "https://nuget.pkg.github.com/huangmingji/index.json"
       
@@ -74,6 +80,9 @@ jobs:
 
 
     # push to nuget
+    - name: Push Stargazer.Abp.Authorization.Application.Contracts to nuget
+      run: dotnet nuget push ./src/Stargazer.Abp.Authorization.Application.Contracts/bin/Release/Stargazer.Abp.Authorization.Application.Contracts.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
+    
     - name: Push Stargazer.Abp.Account.Domain.Shared to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.Domain.Shared/bin/Release/Stargazer.Abp.Account.Domain.Shared.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
       

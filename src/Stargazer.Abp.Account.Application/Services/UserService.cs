@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using System.Linq.Dynamic.Core;
+using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 
 namespace Stargazer.Abp.Account.Application.Services;
 

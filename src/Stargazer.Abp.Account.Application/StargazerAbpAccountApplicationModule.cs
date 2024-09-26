@@ -5,10 +5,12 @@ using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
+using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 
 namespace Stargazer.Abp.Account.Application
 {
     [DependsOn(
+        typeof(StargazerAbpAuthorizationApplicationContractsModule),
         typeof(StargazerAbpAccountApplicationContractsModule),
         typeof(AbpMailKitModule),
         typeof(AbpDddApplicationModule),
@@ -28,6 +30,8 @@ namespace Stargazer.Abp.Account.Application
             });
 
             context.Services.AddTransient<EmailService>();
+            context.Services.AddTransient<AccountPermissionDefinitionProvider>();
+            context.Services.GetRequiredService<AccountPermissionDefinitionProvider>().Define();
         }
     }
 }

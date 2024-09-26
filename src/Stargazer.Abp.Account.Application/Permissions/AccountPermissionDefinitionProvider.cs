@@ -1,27 +1,36 @@
+using Microsoft.Extensions.Localization;
 using Stargazer.Abp.Account.Domain.Shared;
-using Volo.Abp.Authorization.Permissions;
+using Stargazer.Abp.Account.Domain.Shared.Localization.Resources;
+using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 using static Stargazer.Abp.Account.Application.Contracts.Authorization.AccountPermissions;
 
 namespace Stargazer.Abp.Account.Application;
 
 public class AccountPermissionDefinitionProvider : PermissionDefinitionProvider
 {
-    public override void Define(IPermissionDefinitionContext context)
+    private readonly IStringLocalizer<AccountResource> _localizer;
+
+    public AccountPermissionDefinitionProvider(IStringLocalizer<AccountResource> localizer)
     {
-        var accountGroup = context.AddGroup("account", LocalizationExtension.L("UserCenter"));
-        var userPermissionDefinition = accountGroup.AddPermission(User.Manage, LocalizationExtension.L("UserManagement"));
-        userPermissionDefinition.AddChild(User.Create, LocalizationExtension.L("CreateUser"));
-        userPermissionDefinition.AddChild(User.Update, LocalizationExtension.L("UpdateUser"));
-        userPermissionDefinition.AddChild(User.Delete, LocalizationExtension.L("DeleteUser"));
+        _localizer = localizer;
+    }
 
-        var rolePermissionDefinition = accountGroup.AddPermission(Role.Manage, LocalizationExtension.L("RoleManagement"));
-        rolePermissionDefinition.AddChild(Role.Create, LocalizationExtension.L("CreateRole"));
-        rolePermissionDefinition.AddChild(Role.Update, LocalizationExtension.L("UpdateRole"));
-        rolePermissionDefinition.AddChild(Role.Delete, LocalizationExtension.L("DeleteRole"));
+    public override void Define()
+    {
+        var accountGroup = PermissionGroupDefinition.CreateGroup("account", _localizer["UserCenter"]);
+        var userPermissionDefinition = accountGroup.AddPermission(User.Manage, _localizer["UserManagement"]);
+        userPermissionDefinition.AddChild(User.Create, _localizer["CreateUser"]);
+        userPermissionDefinition.AddChild(User.Update, _localizer["UpdateUser"]);
+        userPermissionDefinition.AddChild(User.Delete, _localizer["DeleteUser"]);
 
-        var permissionPermissionDefinition = accountGroup.AddPermission(Permission.Manage, LocalizationExtension.L("PermissionManagement"));
-        permissionPermissionDefinition.AddChild(Permission.Create, LocalizationExtension.L("CreatePermission"));
-        permissionPermissionDefinition.AddChild(Permission.Update, LocalizationExtension.L("UpdatePermission"));
-        permissionPermissionDefinition.AddChild(Permission.Delete, LocalizationExtension.L("DeletePermission"));
+        var rolePermissionDefinition = accountGroup.AddPermission(Role.Manage, _localizer["RoleManagement"]);
+        rolePermissionDefinition.AddChild(Role.Create, _localizer["CreateRole"]);
+        rolePermissionDefinition.AddChild(Role.Update, _localizer["UpdateRole"]);
+        rolePermissionDefinition.AddChild(Role.Delete, _localizer["DeleteRole"]);
+
+        var permissionPermissionDefinition = accountGroup.AddPermission(Permission.Manage, _localizer["PermissionManagement"]);
+        permissionPermissionDefinition.AddChild(Permission.Create, _localizer["CreatePermission"]);
+        permissionPermissionDefinition.AddChild(Permission.Update, _localizer["UpdatePermission"]);
+        permissionPermissionDefinition.AddChild(Permission.Delete, _localizer["DeletePermission"]);
     }
 }

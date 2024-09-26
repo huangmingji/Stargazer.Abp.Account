@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp;
 
-namespace Stargazer.Abp.Account.Application.Contracts.Authorization;
+namespace Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 
 public class AccountAuthorizationException : BusinessException
 {

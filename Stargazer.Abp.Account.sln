@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stargazer.Abp.Account.HttpA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stargazer.Abp.Account.TestBase", "test\Stargazer.Abp.Account.TestBase\Stargazer.Abp.Account.TestBase.csproj", "{F1F70143-6406-46BF-A552-298C2ECAE6BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stargazer.Abp.Authorization.Application.Contracts", "src\Stargazer.Abp.Authorization.Application.Contracts\Stargazer.Abp.Authorization.Application.Contracts.csproj", "{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{F1F70143-6406-46BF-A552-298C2ECAE6BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1F70143-6406-46BF-A552-298C2ECAE6BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1F70143-6406-46BF-A552-298C2ECAE6BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E6E92555-08E5-44F3-9114-D04BDBF0E8F0} = {B9DDCF39-2740-49F5-A6B2-030E5AAE95DC}
@@ -151,5 +157,6 @@ Global
 		{DBF7CD06-EB8F-454C-9401-8E114DE1D5EA} = {3B52D426-B9E0-4D1F-8B63-025A8438E2DF}
 		{74F600F8-D35A-46E8-BC45-310DB5CBD299} = {3B52D426-B9E0-4D1F-8B63-025A8438E2DF}
 		{F1F70143-6406-46BF-A552-298C2ECAE6BD} = {3B52D426-B9E0-4D1F-8B63-025A8438E2DF}
+		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3} = {B9DDCF39-2740-49F5-A6B2-030E5AAE95DC}
 	EndGlobalSection
 EndGlobal

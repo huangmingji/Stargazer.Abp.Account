@@ -21,5 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Stargazer.Abp.Account.Application.Contracts\Stargazer.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
+    <ProjectReference Include="..\Stargazer.Abp.Authorization.Application.Contracts\Stargazer.Abp.Authorization.Application.Contracts.csproj" />
   </ItemGroup>
 </Project>
