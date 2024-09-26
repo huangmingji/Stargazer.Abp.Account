@@ -2,11 +2,12 @@ using Microsoft.Extensions.Localization;
 using Stargazer.Abp.Account.Domain.Shared;
 using Stargazer.Abp.Account.Domain.Shared.Localization.Resources;
 using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
+using Volo.Abp.Application.Services;
 using static Stargazer.Abp.Account.Application.Contracts.Authorization.AccountPermissions;
 
 namespace Stargazer.Abp.Account.Application;
 
-public class AccountPermissionDefinitionProvider : PermissionDefinitionProvider
+public class AccountPermissionDefinitionProvider : ApplicationService, IPermissionDefinitionProvider
 {
     private readonly IStringLocalizer<AccountResource> _localizer;
 
@@ -15,7 +16,7 @@ public class AccountPermissionDefinitionProvider : PermissionDefinitionProvider
         _localizer = localizer;
     }
 
-    public override void Define()
+    public void Define()
     {
         var accountGroup = PermissionGroupDefinition.CreateGroup("account", _localizer["UserCenter"]);
         var userPermissionDefinition = accountGroup.AddPermission(User.Manage, _localizer["UserManagement"]);
@@ -32,5 +33,15 @@ public class AccountPermissionDefinitionProvider : PermissionDefinitionProvider
         permissionPermissionDefinition.AddChild(Permission.Create, _localizer["CreatePermission"]);
         permissionPermissionDefinition.AddChild(Permission.Update, _localizer["UpdatePermission"]);
         permissionPermissionDefinition.AddChild(Permission.Delete, _localizer["DeletePermission"]);
+    }
+
+    public void PostDefine()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void PreDefine()
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -5,7 +5,6 @@ using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
-using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 
 namespace Stargazer.Abp.Account.Application
 {
@@ -20,8 +19,6 @@ namespace Stargazer.Abp.Account.Application
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var configuration = context.Services.GetConfiguration();
-
             context.Services.AddAutoMapperObjectMapper<StargazerAbpAccountApplicationModule>();
 
             Configure<AbpAutoMapperOptions>(options =>
@@ -30,8 +27,7 @@ namespace Stargazer.Abp.Account.Application
             });
 
             context.Services.AddTransient<EmailService>();
-            context.Services.AddTransient<AccountPermissionDefinitionProvider>();
-            context.Services.GetRequiredService<AccountPermissionDefinitionProvider>().Define();
+            context.Services.BuildServiceProvider().GetRequiredService<AccountPermissionDefinitionProvider>().Define();
         }
     }
 }
