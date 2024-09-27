@@ -6,11 +6,12 @@ public static class PermissionGroupDefinition
 
     public static PermissionDefinition CreateGroup(string name, string displayName, string description = "")
     {
-        if (PermissionDefinitions.Any(x => x.ParentName == "" && x.Name == name))
+        var group = PermissionDefinitions.FirstOrDefault(x => x.ParentName == "" && x.Name == name);
+        if (group != null)
         {
-            throw new PermissionDefinitionAlreadyExistsException($"{name} already exists");
+            return group;
         }
-        var group = new PermissionDefinition(name, displayName, "", description);
+        group = new PermissionDefinition(name, displayName, "", description);
         PermissionDefinitions.Add(group);
         return group;
     }
@@ -26,11 +27,12 @@ public static class PermissionGroupDefinition
     /// <exception cref="PermissionDefinitionAlreadyExistsException"></exception>
     public static PermissionDefinition AddPermission(this PermissionDefinition group, string name, string displayName, string description = "")
     {
-        if (PermissionDefinitions.Any(x => x.ParentName == group.Name && x.Name == name))
+        var permissionDefinition = PermissionDefinitions.FirstOrDefault(x => x.ParentName == group.Name && x.Name == name);
+        if (permissionDefinition != null)
         {
-            throw new PermissionDefinitionAlreadyExistsException($"{name} already exists in {group.Name}");
+            return permissionDefinition;
         }
-        var permissionDefinition = new PermissionDefinition(name, displayName, group.Name, description);
+        permissionDefinition = new PermissionDefinition(name, displayName, group.Name, description);
         PermissionDefinitions.Add(permissionDefinition);
         return permissionDefinition;
     }
@@ -46,11 +48,12 @@ public static class PermissionGroupDefinition
     /// <exception cref="PermissionDefinitionAlreadyExistsException"></exception>
     public static PermissionDefinition AddChild(this PermissionDefinition permisson, string name, string displayName, string description = "")
     {
-        if (PermissionDefinitions.Any(x => x.ParentName == permisson.Name && x.Name == name))
+        var child = PermissionDefinitions.FirstOrDefault(x => x.ParentName == permisson.Name && x.Name == name);
+        if (child != null)
         {
-            throw new PermissionDefinitionAlreadyExistsException($"{name} already exists in {permisson.Name}");
+            return permisson;
         }
-        var child = new PermissionDefinition(name, displayName, permisson.Name, description);
+        child = new PermissionDefinition(name, displayName, permisson.Name, description);
         PermissionDefinitions.Add(child);
         return permisson;
     }
