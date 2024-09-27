@@ -3,11 +3,12 @@ using Stargazer.Abp.Account.Domain.Shared;
 using Stargazer.Abp.Account.Domain.Shared.Localization.Resources;
 using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 using Volo.Abp.Application.Services;
+using Volo.Abp.DependencyInjection;
 using static Stargazer.Abp.Account.Application.Contracts.Authorization.AccountPermissions;
 
 namespace Stargazer.Abp.Account.Application;
 
-public class AccountPermissionDefinitionProvider : ApplicationService, IPermissionDefinitionProvider
+public class AccountPermissionDefinitionProvider : IPermissionDefinitionProvider, ITransientDependency
 {
     private readonly IStringLocalizer<AccountResource> _localizer;
 

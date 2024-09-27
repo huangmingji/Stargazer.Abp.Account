@@ -5,6 +5,7 @@ using Volo.Abp.Application;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
+using Stargazer.Abp.Authorization.Application.Contracts.Permissions;
 
 namespace Stargazer.Abp.Account.Application
 {
@@ -27,7 +28,7 @@ namespace Stargazer.Abp.Account.Application
             });
 
             context.Services.AddTransient<EmailService>();
-            context.Services.BuildServiceProvider().GetRequiredService<AccountPermissionDefinitionProvider>().Define();
+            context.Services.AddTransient<IPermissionDefinitionProvider, AccountPermissionDefinitionProvider>();
         }
     }
 }
