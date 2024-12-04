@@ -35,6 +35,9 @@ jobs:
     - name: Pack Stargazer.Abp.Account.EntityFrameworkCore
       run: dotnet pack ./src/Stargazer.Abp.Account.EntityFrameworkCore -c Release -p:PackageVersion=${{ github.ref_name }}
 
+    - name: Pack Stargazer.Abp.Account.EntityFrameworkCore.MongoDB
+      run: dotnet pack ./src/Stargazer.Abp.Account.EntityFrameworkCore.MongoDB -c Release -p:PackageVersion=${{ github.ref_name }}
+
     - name: Pack Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations
       run: dotnet pack ./src/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations -c Release -p:PackageVersion=${{ github.ref_name }}
 
@@ -62,6 +65,9 @@ jobs:
 
     - name: Push Stargazer.Abp.Account.EntityFrameworkCore to github
       run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.*.nupkg --api-key ${{ secrets.GIT_PAT }} --source "https://nuget.pkg.github.com/huangmingji/index.json"
+
+    - name: Push Stargazer.Abp.Account.EntityFrameworkCore.MongoDB to github
+      run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore.MongoDB/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.MongoDB.*.nupkg --api-key ${{ secrets.GIT_PAT }} --source "https://nuget.pkg.github.com/huangmingji/index.json"
 
     - name: Push Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations to github
       run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.*.nupkg --api-key ${{ secrets.GIT_PAT }} --source "https://nuget.pkg.github.com/huangmingji/index.json"
@@ -91,6 +97,9 @@ jobs:
 
     - name: Push Stargazer.Abp.Account.EntityFrameworkCore to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
+
+    - name: Push Stargazer.Abp.Account.EntityFrameworkCore.MongoDB to nuget
+      run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore.MongoDB/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.MongoDB.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json
 
     - name: Push Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations to nuget
       run: dotnet nuget push ./src/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations/bin/Release/Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate -s https://api.nuget.org/v3/index.json

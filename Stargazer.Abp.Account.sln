@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stargazer.Abp.Account.TestB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stargazer.Abp.Authorization.Application.Contracts", "src\Stargazer.Abp.Authorization.Application.Contracts\Stargazer.Abp.Authorization.Application.Contracts.csproj", "{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stargazer.Abp.Account.EntityFrameworkCore.MongoDB", "src\Stargazer.Abp.Account.EntityFrameworkCore.MongoDB\Stargazer.Abp.Account.EntityFrameworkCore.MongoDB.csproj", "{64FBAC41-7D40-4984-B56F-098B204161D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -136,6 +138,10 @@ Global
 		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64FBAC41-7D40-4984-B56F-098B204161D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64FBAC41-7D40-4984-B56F-098B204161D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64FBAC41-7D40-4984-B56F-098B204161D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64FBAC41-7D40-4984-B56F-098B204161D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E6E92555-08E5-44F3-9114-D04BDBF0E8F0} = {B9DDCF39-2740-49F5-A6B2-030E5AAE95DC}
@@ -158,5 +164,6 @@ Global
 		{74F600F8-D35A-46E8-BC45-310DB5CBD299} = {3B52D426-B9E0-4D1F-8B63-025A8438E2DF}
 		{F1F70143-6406-46BF-A552-298C2ECAE6BD} = {3B52D426-B9E0-4D1F-8B63-025A8438E2DF}
 		{B081438B-1669-4FCC-8ABA-8327B6F1EAB3} = {B9DDCF39-2740-49F5-A6B2-030E5AAE95DC}
+		{64FBAC41-7D40-4984-B56F-098B204161D2} = {B9DDCF39-2740-49F5-A6B2-030E5AAE95DC}
 	EndGlobalSection
 EndGlobal
