@@ -3,7 +3,7 @@
 // using System.Text;
 // using System.Threading.Tasks;
 // using Stargazer.Abp.Account.Application;
-// using Lemon.Common.Extend;
+// using Stargazer.Common.Extend;
 // using Microsoft.Extensions.Configuration;
 // using IdentityModel.Client;
 

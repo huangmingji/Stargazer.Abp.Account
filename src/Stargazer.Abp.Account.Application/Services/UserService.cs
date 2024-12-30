@@ -3,7 +3,7 @@ using Stargazer.Abp.Account.Application.Contracts.Users;
 using Stargazer.Abp.Account.Application.Contracts.Users.Dtos;
 using Stargazer.Abp.Account.Domain.Repository;
 using Stargazer.Abp.Account.Domain.Users;
-using Lemon.Common.Extend;
+using Stargazer.Common.Extend;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;

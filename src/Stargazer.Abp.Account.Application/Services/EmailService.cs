@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text;
-using Lemon.Common.Extend;
+using Stargazer.Common.Extend;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
