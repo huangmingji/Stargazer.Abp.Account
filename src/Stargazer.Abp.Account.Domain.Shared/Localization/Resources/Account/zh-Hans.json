@@ -1,0 +1,26 @@
+﻿{
+    "culture": "zh-Hans",
+    "texts": {
+        "UserCenter": "用户中心",
+        "UserCenterManager": "用户中心管理员",
+        "UserManagement": "用户管理",
+        "CreateUser": "创建用户",
+        "UpdateUser": "修改用户",
+        "DeleteUser": "删除用户",
+        "RoleManagement": "角色管理",
+        "CreateRole": "创建角色",
+        "UpdateRole": "修改角色",
+        "DeleteRole": "删除角色",
+        "PermissionManagement": "权限管理",
+        "CreatePermission": "创建权限",
+        "UpdatePermission": "修改权限",
+        "DeletePermission": "删除权限",
+        "UserName": "用户名",
+        "Password": "密码",
+        "Email": "邮箱",
+        "Role": "角色",
+        "Permissions": "权限",
+        "Save": "保存",
+        "UserPasswordError": "用户名或密码错误"
+    }
+}

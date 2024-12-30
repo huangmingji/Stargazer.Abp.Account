@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Stargazer.Abp.Account.Application</PackageId>
@@ -12,14 +12,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AutoMapper" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.Caching" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.Ddd.Application" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.MailKit" Version="7.2.1" />
+    <PackageReference Include="Volo.Abp.AutoMapper" Version="9.0.2" />
+    <PackageReference Include="Volo.Abp.Caching" Version="9.0.2" />
+    <PackageReference Include="Volo.Abp.Ddd.Application" Version="9.0.2" />
+    <PackageReference Include="Volo.Abp.MailKit" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stargazer.Abp.Account.Application.Contracts\Stargazer.Abp.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
+    <ProjectReference Include="..\Stargazer.Abp.Authorization.Application.Contracts\Stargazer.Abp.Authorization.Application.Contracts.csproj" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Stargazer.Abp.Account.Application.Contracts</PackageId>
@@ -12,14 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Authorization" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="7.2.1" />
-    <PackageReference Include="Volo.Abp.FluentValidation" Version="7.2.1" />
+    <PackageReference Include="Volo.Abp.Authorization" Version="9.0.2" />
+    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="9.0.2" />
+    <PackageReference Include="Volo.Abp.FluentValidation" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Stargazer.Abp.Account.Domain.Shared\Stargazer.Abp.Account.Domain.Shared.csproj" />
-    <ProjectReference Include="..\Stargazer.Abp.Account.Domain\Stargazer.Abp.Account.Domain.csproj" />
   </ItemGroup>
 
 </Project>

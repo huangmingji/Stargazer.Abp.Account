@@ -17,13 +17,12 @@ namespace Stargazer.Abp.Account.Domain.Shared
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<StargazerAbpAccountDomainSharedModule>(baseNamespace: "Stargazer.Abp.Account.Domain.Shared");
+                options.FileSets.AddEmbedded<StargazerAbpAccountDomainSharedModule>();
             });
-
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<AccountResource>("zh_CN")
+                    .Add<AccountResource>("zh-Hans")
                     .AddVirtualJson("/Localization/Resources/Account");
             });
         }

@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Stargazer.Abp.Account.Domain.Shared.Users;
 
 namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
 {
@@ -72,22 +70,22 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         /// <summary>
         /// 允许登录时间开始
         /// </summary>
-        public DateTime AllowStartTime { get; set; } = DateTime.Now;
+        public DateTime AllowStartTime { get; set; } = DateTime.Now.Date.AddDays(-1);
 
         /// <summary>
         /// 允许登录时间结束
         /// </summary>
-        public DateTime AllowEndTime { get; set; } = DateTime.Now.AddYears(100);
+        public DateTime AllowEndTime { get; set; } = DateTime.Now.Date.AddYears(100);
 
         /// <summary>
         /// 暂停用户开始日期
         /// </summary>
-        public DateTime LockStartTime { get; set; } = DateTime.Now.AddYears(100);
+        public DateTime LockStartTime { get; set; } = DateTime.Now.Date.AddYears(100);
 
         /// <summary>
         /// 暂停用户结束日期
         /// </summary>
-        public DateTime LockEndDate { get; set; } = DateTime.Now.AddYears(100);
+        public DateTime LockEndDate { get; set; } = DateTime.Now.Date.AddYears(100);
 
         /// <summary>
         /// 第一次访问时间
@@ -103,6 +101,22 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
         /// 最后访问时间
         /// </summary>
         public DateTime LastVisitTime { get; set; } = DateTime.Now;
+
+        public string PersonalProfile { get; set; } = "";
+
+        public string Country { get; set; } = "";
+
+        public string Province { get; set; } = "";
+
+        public string City { get; set; } = "";
+
+        public string District { get; set; } = "";
+
+        public string Address { get; set; } = "";
+
+        public string TelephoneNumberAreaCode { get; set; } = "";
+
+        public string TelephoneNumber { get; set; } = "";
 
         /// <summary>
         /// 最后修改密码日期
@@ -125,10 +139,28 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users.Dtos
             {
                 if (userRoleDto.RoleData != null)
                 {
-                    permissions.AddRange(userRoleDto.RoleData.Permissions.ConvertAll(x => x.Permission));
+                    permissions.AddRange(userRoleDto.RoleData.Permissions.ConvertAll(x => x.PermissionData.Permission));
                 }
             }
             return permissions;
+        }
+        
+        public void CheckAllowTime()
+        {
+            DateTime now = DateTime.Now;
+            if (now < AllowStartTime || now > AllowEndTime)
+            {
+                throw new UserNotAllowLoginException(Id);
+            }
+        }
+
+        public void CheckLockTime()
+        {
+            DateTime now = DateTime.Now;
+            if (now > LockStartTime && now < LockEndDate)
+            {
+                throw new UserLockLoginException(Id);
+            }
         }
     }
 }

@@ -10,11 +10,7 @@ namespace Stargazer.Abp.Account.Application.Services
 {
     public class PermissionService : ApplicationService, IPermissionService
     {
-        private readonly IRepository<PermissionData, Guid> _permissionRepository;
-        public PermissionService(IRepository<PermissionData, Guid> permissionRepository)
-        {
-            this._permissionRepository = permissionRepository;
-        }
+        private IRepository<PermissionData, Guid> PermissionRepository => this.LazyServiceProvider.LazyGetRequiredService<IRepository<PermissionData, Guid>>();
 
         public async Task<PermissionDto> CreateAsync(UpdatePermissionDto input)
         {
@@ -24,39 +20,39 @@ namespace Stargazer.Abp.Account.Application.Services
                 input.Name, 
                 input.Permission, 
                 input.ParentId);
-            var result = await _permissionRepository.InsertAsync(permissionData);
+            var result = await PermissionRepository.InsertAsync(permissionData);
             return ObjectMapper.Map<PermissionData, PermissionDto>(result);
         }
 
         public async Task<PermissionDto> FindAsync(string permission)
         {
-            var data = await _permissionRepository.FindAsync(x => x.Permission == permission);
+            var data = await PermissionRepository.FindAsync(x => x.Permission == permission);
             return ObjectMapper.Map<PermissionData, PermissionDto>(data);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            await _permissionRepository.DeleteAsync(x=> x.Id == id);
+            await PermissionRepository.DeleteAsync(x=> x.Id == id);
         }
 
         public async Task<PermissionDto> GetAsync(Guid id)
         {
-            var data = await _permissionRepository.GetAsync(x => x.Id == id);
+            var data = await PermissionRepository.GetAsync(x => x.Id == id);
             return ObjectMapper.Map<PermissionData, PermissionDto>(data);
         }
 
         public async Task<List<PermissionDto>> GetListAsync()
         {
-            var data = await _permissionRepository.GetListAsync();
+            var data = await PermissionRepository.GetListAsync();
             return ObjectMapper.Map<List<PermissionData>, List<PermissionDto>>(data);
         }
 
         public async Task<PermissionDto> UpdateAsync(Guid id, UpdatePermissionDto input)
         {
             await CheckNotNull(input, id);
-            var permissionData = await _permissionRepository.GetAsync(x => x.Id == id);
+            var permissionData = await PermissionRepository.GetAsync(x => x.Id == id);
             permissionData.Set(input.Name, input.Permission, input.ParentId);
-            var result = await _permissionRepository.UpdateAsync(permissionData);
+            var result = await PermissionRepository.UpdateAsync(permissionData);
             return ObjectMapper.Map<PermissionData, PermissionDto>(result);
         }
 
@@ -66,7 +62,7 @@ namespace Stargazer.Abp.Account.Application.Services
                             .AndIf(true, x=> x.Name == input.Name || x.Permission == input.Permission)
                             .AndIf(true, x=> x.ParentId == input.ParentId)
                             .AndIf(id!= null, x=> x.Id != id);
-            if(await _permissionRepository.AnyAsync(expression))
+            if(await PermissionRepository.AnyAsync(expression))
             {
                 throw new UserFriendlyException("权限已存在");
             }

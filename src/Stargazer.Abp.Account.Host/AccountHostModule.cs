@@ -1,25 +1,18 @@
-﻿using System;
-using System.Linq;
-using Stargazer.Abp.Account.Application;
-using Stargazer.Abp.Account.EntityFrameworkCore.DbMigrations;
+﻿using Stargazer.Abp.Account.Application;
 using Stargazer.Abp.Account.HttpApi;
 using Lemon.Common.Extend;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Stargazer.Abp.Account.EntityFrameworkCore;
 
 namespace Stargazer.Abp.Account.Host
 {
     [DependsOn(
-    typeof(StargazerAbpAccountEntityFrameworkCoreDbMigrationsModule),
+    typeof(StargazerAbpAccountEntityFrameworkCoreModule),
     typeof(StargazerAbpAccountApplicationModule),
     typeof(StargazerAbpAccountHttpApiModule),
     typeof(AbpAspNetCoreMvcModule),
@@ -29,16 +22,6 @@ namespace Stargazer.Abp.Account.Host
     public class StargazerAbpAccountHostModule : AbpModule
     {
         private const string DefaultCorsPolicyName = "Default";
-        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddSwaggerGen(
-                options =>
-                {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Account Service API", Version = "v1" });
-                    options.DocInclusionPredicate((docName, description) => true);
-                });
-        }
-
         private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddCors(options =>
@@ -86,7 +69,6 @@ namespace Stargazer.Abp.Account.Host
             //         });
             // });
             
-            ConfigureSwaggerServices(context);
             ConfigureCors(context, configuration);
 
             // #region 由于不打算使用abp vnext的ids4，所以需要在这里注入ICurrentUser和ICurrentTenant
@@ -111,11 +93,6 @@ namespace Stargazer.Abp.Account.Host
             else
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Account Service API");
-                });
             }
 
             app.UseCors(DefaultCorsPolicyName);

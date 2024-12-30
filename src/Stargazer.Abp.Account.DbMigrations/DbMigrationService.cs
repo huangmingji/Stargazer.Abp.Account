@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Stargazer.Abp.Account.Application.Contracts.Authorization;
 using Stargazer.Abp.Account.Application.Contracts.Permissions;
@@ -16,20 +17,24 @@ namespace Stargazer.Abp.Account.DbMigrations
         private IServiceProvider _serviceProvider;
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IPermissionService _permissionService;
         public DbMigrationService(
-            IServiceProvider serviceProvider, 
-            IUserService userService, 
-            IRoleService roleService)
+            IServiceProvider serviceProvider,
+            IUserService userService,
+            IRoleService roleService,
+            IPermissionService permissionService)
         {
             _serviceProvider = serviceProvider;
             _userService = userService;
             _roleService = roleService;
+            _permissionService = permissionService;
         }
 
         public async Task MigrateAsync()
         {
             try
             {
+                var permissions = await _permissionService.GetListAsync();
                 var role = await _roleService.FindAsync("超级管理员");
                 if (role == null)
                 {
@@ -38,19 +43,21 @@ namespace Stargazer.Abp.Account.DbMigrations
                         Name = "超级管理员",
                         IsDefault = false
                     };
-                    adminRole.Permissions.AddRange(AccountPermissions.GetAll());
+
+                    var permissionIds = permissions.Where(x => AccountPermissions.GetAll().Contains(x.Permission)).ToList().ConvertAll(x => x.Id);
+                    adminRole.PermissionIds.AddRange(permissionIds);
                     role = await _roleService.CreatePrivateAsync(adminRole);
                 }
 
                 var user = await _userService.FindByEmailAsync("admin@yunpan.com");
                 if (user == null)
                 {
-                    var userInput = new CreateUserWithRolesDto()
+                    var userInput = new CreateOrUpdateUserWithRolesDto()
                     {
                         UserName = "admin",
                         Password = "Password123456",
                         Email = "admin@yunpan.com",
-                        RoleIds = new List<Guid>(){role.Id}
+                        RoleIds = new List<Guid>() { role.Id }
                     };
                     await _userService.CreateAsync(userInput);
                 }

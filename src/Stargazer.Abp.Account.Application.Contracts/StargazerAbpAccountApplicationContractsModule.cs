@@ -1,5 +1,4 @@
 using Stargazer.Abp.Account.Application.Contracts.Authorization;
-using Stargazer.Abp.Account.Application.Contracts.Permissions;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization;
@@ -17,7 +16,6 @@ namespace Stargazer.Abp.Account.Application.Contracts
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddScoped<IAccountAuthorization, AccountAuthorization>();
         }
     }
 }

@@ -1,23 +1,26 @@
 ﻿{
     "culture": "en",
     "texts": {
-        "user": {
-            "manage": "account manage",
-            "create": "create",
-            "update": "update",
-            "delete": "delete"
-        },
-        "role": {
-            "manage": "role manage",
-            "create": "create",
-            "update": "update",
-            "delete": "delete"
-        },
-        "permission": {
-            "manage": "permission manage",
-            "create": "create",
-            "update": "update",
-            "delete": "delete"
-        }
+        "UserCenter": "user center",
+        "UserCenterManager": "user center manager",
+        "UserManagement": "user management",
+        "CreateUser": "create user",
+        "UpdateUser": "update user",
+        "DeleteUser": "delete user",
+        "RoleManagement": "role management",
+        "CreateRole": "create role",
+        "UpdateRole": "update role",
+        "DeleteRole": "delete role",
+        "PermissionManagement": "permission management",
+        "CreatePermission": "create permission",
+        "UpdatePermission": "update permission",
+        "DeletePermission": "delete permission",
+        "UserName": "user name",
+        "Password": "password",
+        "Email": "email",
+        "Role": "role",
+        "Permissions": "permissions",
+        "Save": "save",
+        "UserPasswordError": "user password error"
     }
 }

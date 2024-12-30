@@ -11,27 +11,31 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
     {
         Task<UserDto> CreateAsync(CreateUserDto input);
         
-        Task<UserDto> CreateAsync(CreateUserWithRolesDto input);
+        Task<UserDto> CreateAsync(CreateOrUpdateUserWithRolesDto input);
 
         Task<UserDto> CreateAsync(UpdateUserDto input);
 
         Task<UserDto> CreateAsync(CreateUserDefaultRoleDto input);
         
         Task<UserDto> GetAsync(Guid id);
+
+        Task<UserDto> GetIncludingDeletedAsync(Guid id);
         
-        Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex,
-            int pageSize, string? name = null, string? account = null,
-            string? email = null, string? phoneNumber = null);
+        Task<PagedResultDto<UserDto>> GetListAsync(int pageIndex, int pageSize, string? searchText = null);
+
+        Task<PagedResultDto<UserDto>> GetListIncludingDeletedAsync(int pageIndex, int pageSize, string? searchText = null);
 
         Task<List<UserDto>> GetListAsync(List<Guid> userIds);
 
         Task DeleteAsync(Guid id);
 
-        Task<UserDto> FindByPhoneNumberAsync(string phoneNumber);
+        Task DeleteIncludingDeletedAsync(Guid id);
 
-        Task<UserDto> FindByEmailAsync(string email);
+        Task<UserDto?> FindByPhoneNumberAsync(string phoneNumber);
 
-        Task<UserDto> FindByAccountAsync(string account);
+        Task<UserDto?> FindByEmailAsync(string email);
+
+        Task<UserDto?> FindByAccountAsync(string account);
 
         Task<UserDto> UpdateUserNameAsync(Guid id, UpdateUserNameDto input);
 
@@ -51,6 +55,12 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
 
         Task<UserDto> UpdateUserAsync(Guid id, UpdateUserDto input);
 
+        Task<UserDto> UpdatePersonalSettingsAsync(Guid id, UpdatePersonalSettingsDto input);
+
+        Task<UserDto> UpdateUserAsync(Guid id, CreateOrUpdateUserWithRolesDto input);
+        
+        Task<UserDto> UpdateUserIncludingDeletedAsync(Guid id, CreateOrUpdateUserWithRolesDto input);
+
         Task<UserDto> UpdateUserRoleAsync(Guid id, UpdateUserRoleDto input);
 
         Task<UserDto> VerifiedPhoneNumberAsync(Guid id, string phoneNumber);
@@ -58,5 +68,9 @@ namespace Stargazer.Abp.Account.Application.Contracts.Users
         Task<UserDto> VerifiedEmailAsync(Guid id, string email);
 
         Task<UserDto> UpdateAccountAsync(Guid id, UpdateAccountDto input);
+
+        Task ResetPasswordAsync(ResetPasswordDto input);
+
+        Task FindPasswordAsync(FindPasswordDto input);
     }
 }
