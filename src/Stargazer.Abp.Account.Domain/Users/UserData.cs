@@ -4,7 +4,7 @@ using Stargazer.Abp.Account.Domain.Shared.Users;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities.Auditing;
-using static Lemon.Common.Cryptography;
+using static Stargazer.Common.Cryptography;
 
 namespace Stargazer.Abp.Account.Domain.Users
 {

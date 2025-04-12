@@ -1,5 +1,5 @@
 ﻿using System;
-using Lemon.Common.Extend;
+using Stargazer.Common.Extend;
 using Shouldly;
 using Stargazer.Abp.Account.Domain.Users;
 

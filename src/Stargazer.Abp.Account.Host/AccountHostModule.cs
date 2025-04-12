@@ -1,6 +1,6 @@
 ﻿using Stargazer.Abp.Account.Application;
 using Stargazer.Abp.Account.HttpApi;
-using Lemon.Common.Extend;
+using Stargazer.Common.Extend;
 using Microsoft.AspNetCore.Cors;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;

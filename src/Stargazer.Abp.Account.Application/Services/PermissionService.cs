@@ -1,7 +1,7 @@
 ﻿using Stargazer.Abp.Account.Application.Contracts.Permissions;
 using Stargazer.Abp.Account.Application.Contracts.Permissions.Dtos;
 using Stargazer.Abp.Account.Domain.Role;
-using Lemon.Common.Extend;
+using Stargazer.Common.Extend;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
